@@ -13,7 +13,7 @@
         android:id="@+id/moviesLayout"
         android:gravity="center"
         android:layout_margin="8dp"
-        android:background="@color/purple"
+        android:background="@color/red"
         android:layout_width="170dp"
         android:padding="1dp"
         android:layout_height="250dp">

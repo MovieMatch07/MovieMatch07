@@ -5,9 +5,9 @@ val jsonAdvenchureMovies = """
 {
   "movies": [
    
-     {
+          {
       "movieUrl": "https://firebasestorage.googleapis.com/v0/b/moviematch-39d8e.appspot.com/o/Movies%2FAdventure%2FMovies%2FAquaman.mkv?alt=media&token=f26a87dc-f828-44c8-b413-2bbd876512ed",
-      "imageUrl": "https://firebasestorage.googleapis.com/v0/b/moviematch-39d8e.appspot.com/o/Movies%2FAnimation%2Fimages%2FCoco.jpg?alt=media&token=2b6a9956-d6b0-447e-9c99-633e34212c83",
+      "imageUrl": "https://firebasestorage.googleapis.com/v0/b/moviematch-39d8e.appspot.com/o/Movies%2FAdventure%2FImages%2Faquaman.jpg?alt=media&token=5eed3612-b91e-4656-85ea-1b8e868a0785",
       "movieName": "Aquaman",
       "categories": [ "Adventure","Action"],
       "length": "1h 45m"
@@ -15,81 +15,82 @@ val jsonAdvenchureMovies = """
     
      {
       "movieUrl": "https://firebasestorage.googleapis.com/v0/b/moviematch-39d8e.appspot.com/o/Movies%2FAdventure%2FMovies%2FDora%20the%20Explorer%20Lost%20City.mkv?alt=media&token=68282e4e-463b-45af-a0a0-337319ff5661",
-      "imageUrl": "https://firebasestorage.googleapis.com/v0/b/moviematch-39d8e.appspot.com/o/Movies%2FAnimation%2Fimages%2FFrozen.jpg?alt=media&token=7664f438-d05c-4f8e-b233-4af0086491f2",
+      "imageUrl": "https://firebasestorage.googleapis.com/v0/b/moviematch-39d8e.appspot.com/o/Movies%2FAdventure%2FImages%2FDoraAndLostCity.jpg?alt=media&token=7f8cc040-b848-4479-b572-9ceaa30a672d",
       "movieName": "Dora and the lost city",
       "categories": ["Adventure", "Musical"],
-      "length": "1h 42m
-"
+      "length": "1h 42m"
     },
          
      {
       "movieUrl": "https://firebasestorage.googleapis.com/v0/b/moviematch-39d8e.appspot.com/o/Movies%2FAdventure%2FMovies%2FJack.the.Giant.Slayer.mkv?alt=media&token=544f049a-04b1-41b1-9f6c-bd50dd520e63",
-      "imageUrl": "https://firebasestorage.googleapis.com/v0/b/moviematch-39d8e.appspot.com/o/Movies%2FAnimation%2Fimages%2FPussInBoots.jpg?alt=media&token=6091ed8e-675b-45e8-a461-471c034e9c13",
+      "imageUrl": "https://firebasestorage.googleapis.com/v0/b/moviematch-39d8e.appspot.com/o/Movies%2FAdventure%2FImages%2FjackAndGiant.jpg?alt=media&token=2f097610-ad62-4be2-8a8f-104d20c82256",
       "movieName": "Jack the Giant Slayer",
       "categories": ["Adventure", "Fantacy"],
       "length": "1h 42m"
     },
          
      {
-      "movieUrl": "https://firebasestorage.googleapis.com/v0/b/moviematch-39d8e.appspot.com/o/Movies%2FAnimation%2FMovies%2FIceAge4.mkv?alt=media&token=123c44ca-b730-414f-b863-da2a72dd1ced",
-      "imageUrl": "https://firebasestorage.googleapis.com/v0/b/moviematch-39d8e.appspot.com/o/Movies%2FAnimation%2Fimages%2FiceAge.jpg?alt=media&token=96839186-1bc7-4f33-bf96-cf0aacf6b2d6",
-      "movieName": "Ice Age",
+      "movieUrl": "https://firebasestorage.googleapis.com/v0/b/moviematch-39d8e.appspot.com/o/Movies%2FAdventure%2FMovies%2FJumanji.WelcomeToTheJungle.mkv?alt=media&token=81d14887-1792-45b7-acf6-67b55dd87c8e",
+      "imageUrl": "https://firebasestorage.googleapis.com/v0/b/moviematch-39d8e.appspot.com/o/Movies%2FAdventure%2FImages%2Fjumanji2.jpg?alt=media&token=15b57c1c-47e9-4835-bd82-29b400900c1a",
+      "movieName": "Jumanji : Welcome to the jungle",
       "categories": ["Adventure", "Comedy"],
       "length": "1h 28m"
     },
          
-     {
-      "movieUrl": "https://firebasestorage.googleapis.com/v0/b/moviematch-39d8e.appspot.com/o/Movies%2FAnimation%2FMovies%2FRango.mkv?alt=media&token=c9269860-998f-4d81-bf5c-166663670497",
-      "imageUrl": "https://firebasestorage.googleapis.com/v0/b/moviematch-39d8e.appspot.com/o/Movies%2FAnimation%2Fimages%2FRango.jpg?alt=media&token=3ea249a9-ca08-4eda-88b7-47dfa80d998b",
-      "movieName": "Rango",
-      "categories": ["Adventure", "Western"],
-      "length": "1h 47m"
-    },
-         
-     {
-      "movieUrl": "https://firebasestorage.googleapis.com/v0/b/moviematch-39d8e.appspot.com/o/Movies%2FAnimation%2FMovies%2FTangled.mkv?alt=media&token=95e78f99-71f3-483e-8d84-ee53cdcc74d3",
-      "imageUrl": "https://firebasestorage.googleapis.com/v0/b/moviematch-39d8e.appspot.com/o/Movies%2FAnimation%2Fimages%2FTangled.jpg?alt=media&token=5448fecb-fa73-40ec-a7c8-0d74b157d3ee",
-      "movieName": "Tangled",
-      "categories": ["Family", "Musical"],
-      "length": "1h 40m"
-    },
-         
-     {
-      "movieUrl": "https://firebasestorage.googleapis.com/v0/b/moviematch-39d8e.appspot.com/o/Movies%2FAnimation%2FMovies%2FTheCroods.mkv?alt=media&token=dc4f78d6-e4d1-4fa9-9975-5c1554a24aed",
-      "imageUrl": "https://firebasestorage.googleapis.com/v0/b/moviematch-39d8e.appspot.com/o/Movies%2FAnimation%2Fimages%2Fcroods.jpg?alt=media&token=54703574-71fa-4476-aee7-7361fc7aa456",
-      "movieName": "The Croods  ",
+    {
+    
+      "movieUrl": "https://firebasestorage.googleapis.com/v0/b/moviematch-39d8e.appspot.com/o/Movies%2FAdventure%2FMovies%2FJumanjiNextLevel.mkv?alt=media&token=2c5ecc5f-3385-47ab-9036-ac8eb0327de2",
+      "imageUrl": "https://firebasestorage.googleapis.com/v0/b/moviematch-39d8e.appspot.com/o/Movies%2FAdventure%2FImages%2Fjumanji3.jpg?alt=media&token=d5e4669d-8392-4e2e-9e96-8c1e250ef888",
+      "movieName": "Jumanji : Next Level",
       "categories": ["Adventure", "Comedy"],
-      "length": "1h 38m"
+      "length": "1h 28m"
     },
          
-     {
-      "movieUrl": "https://firebasestorage.googleapis.com/v0/b/moviematch-39d8e.appspot.com/o/Movies%2FAnimation%2FMovies%2FUp.mkv?alt=media&token=1f1d6424-7c6f-45cb-a78f-e5d1aadeb630",
-      "imageUrl": "https://firebasestorage.googleapis.com/v0/b/moviematch-39d8e.appspot.com/o/Movies%2FAnimation%2Fimages%2Fup.jpg?alt=media&token=bb073c28-f248-4aa3-a9dc-4b361dfab64c",
-      "movieName": "Up",
+         {
+      "movieUrl": "https://firebasestorage.googleapis.com/v0/b/moviematch-39d8e.appspot.com/o/Movies%2FAdventure%2FMovies%2FJungleCruise.mkv?alt=media&token=3717b873-c8c0-458e-ba20-cdae9e95fdff",
+      "imageUrl": "https://firebasestorage.googleapis.com/v0/b/moviematch-39d8e.appspot.com/o/Movies%2FAdventure%2FImages%2FjungleCruice.jpg?alt=media&token=04233b44-ab36-4881-acba-c65a8494efb8",
+      "movieName": "Jungle Cruise",
+      "categories": ["Adventure", "Comedy"],
+      "length": "1h 28m"
+    },
+         
+             {
+      "movieUrl": "https://firebasestorage.googleapis.com/v0/b/moviematch-39d8e.appspot.com/o/Movies%2FAdventure%2FMovies%2FpiratesOfCaribbean4.mkv?alt=media&token=5187b27a-c1fd-4bbe-b87d-53d7d61ae5f9",
+      "imageUrl": "https://firebasestorage.googleapis.com/v0/b/moviematch-39d8e.appspot.com/o/Movies%2FAdventure%2FImages%2Fpirates4.jpg?alt=media&token=64023073-32e9-4443-ac94-24d32f8bddb7",
+      "movieName": "Pirates 4",
+      "categories": ["Adventure", "Comedy"],
+      "length": "1h 28m"
+    },
+         
+             {
+      "movieUrl": "https://firebasestorage.googleapis.com/v0/b/moviematch-39d8e.appspot.com/o/Movies%2FAdventure%2FMovies%2FPiratesOftheCaribbean%206.mkv?alt=media&token=e19c3425-20d1-4511-8d82-cd782d8d4822",
+      "imageUrl": "https://firebasestorage.googleapis.com/v0/b/moviematch-39d8e.appspot.com/o/Movies%2FAdventure%2FImages%2Fpirates5.jpg?alt=media&token=b35a99ef-8d74-44d8-8dc0-5d3c8241ac57",
+      "movieName": "Pirates 5",
+      "categories": ["Adventure", "Comedy"],
+      "length": "1h 28m"
+    },
+         
+             {
+      "movieUrl": "https://firebasestorage.googleapis.com/v0/b/moviematch-39d8e.appspot.com/o/Movies%2FAdventure%2FMovies%2FThe.Jungle.Book.mkv?alt=media&token=3508cece-93fc-45dc-88fd-820c25cde8d4",
+      "imageUrl": "https://firebasestorage.googleapis.com/v0/b/moviematch-39d8e.appspot.com/o/Movies%2FAdventure%2FImages%2FtheJungleBook.jpg?alt=media&token=ccb08c9f-62d7-4538-873f-cb4761e7b610",
+      "movieName": "The Jungle Book",
       "categories": ["Adventure", "Family"],
-      "length": "1h 36m"
+      "length": "1h 28m"
     },
          
-     {
-      "movieUrl": "https://firebasestorage.googleapis.com/v0/b/moviematch-39d8e.appspot.com/o/Movies%2FAnimation%2FMovies%2FToyStory.mkv?alt=media&token=9efe7d69-561e-4bc9-bff8-2d979319a1a7",
-      "imageUrl": "https://firebasestorage.googleapis.com/v0/b/moviematch-39d8e.appspot.com/o/Movies%2FAnimation%2Fimages%2FtoyStory.jpg?alt=media&token=63332de6-054e-4980-9b8e-96dcc132c449",
-      "movieName": "Toy Story",
-      "categories": ["Adventure", "Family"],
-      "length": "1h 21m"
+             {
+      "movieUrl": "https://firebasestorage.googleapis.com/v0/b/moviematch-39d8e.appspot.com/o/Movies%2FAdventure%2FImages%2FLostCityZ.jpg?alt=media&token=3b04bfd6-b795-4481-a127-b09269c74474",
+      "imageUrl": "https://firebasestorage.googleapis.com/v0/b/moviematch-39d8e.appspot.com/o/Movies%2FAdventure%2FImages%2FLostCityZ.jpg?alt=media&token=3b04bfd6-b795-4481-a127-b09269c74474",
+      "movieName": "Lost City Z",
+      "categories": ["Adventure", "Thriller"],
+      "length": "1h 28m"
     },
          
-     {
-      "movieUrl": "https://firebasestorage.googleapis.com/v0/b/moviematch-39d8e.appspot.com/o/Movies%2FAnimation%2FMovies%2FYourName.mkv?alt=media&token=04dff79c-0bc4-4456-acd8-758a858eb4b1",
-      "imageUrl": "https://firebasestorage.googleapis.com/v0/b/moviematch-39d8e.appspot.com/o/Movies%2FAnimation%2Fimages%2FyourName.jpg?alt=media&token=c5b1675b-a519-494f-8fac-60faee922190",
-      "movieName": "Your Name",
-      "categories": ["Adventure", "Romance"],
-      "length": "1h 52m"
-    },
      
   ]
 }
 """
 
 fun getAdventureMovieJsonData(): String {
-    return jsonAnimatinMovies
+    return jsonAdvenchureMovies
 }

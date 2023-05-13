@@ -1,11 +1,13 @@
 package com.suraj.moviematch.adapter
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
+import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.suraj.moviematch.R
@@ -22,9 +24,7 @@ class MovieAdapter(private val movies: List<Movie>) :
 
     var setOnClickListener: SetOnClickListener? = null
 
-    private fun setOnSaveButtonClick(setOnClickListener: SetOnClickListener) {
-        this.setOnClickListener = setOnClickListener;
-    }
+
 
     inner class ViewHolder(val view: View) : RecyclerView.ViewHolder(view) {
 
@@ -42,6 +42,10 @@ class MovieAdapter(private val movies: List<Movie>) :
             moviesLayout = view.findViewById(R.id.moviesLayout)
 
 
+            view.setOnClickListener {
+                setOnClickListener?.onClick(movies[adapterPosition])
+            }
+
         }
 
     }
@@ -50,7 +54,6 @@ class MovieAdapter(private val movies: List<Movie>) :
 
         val view = LayoutInflater.from(parent.context)
             .inflate(R.layout.rv_movies_layout, null)
-
         return ViewHolder(view)
 
     }
@@ -59,19 +62,9 @@ class MovieAdapter(private val movies: List<Movie>) :
 
         val movie = movies[position]
 
-
         holder.txtMovieName.text = movie.movieName
 
         Glide.with(holder.view.context).load(movie.imageUrl).into(holder.imgMovie)
-
-
-
-        holder.mainContainer.setOnClickListener {
-            setOnClickListener?.onClick(Movie(movie.movieUrl,movie.imageUrl,movie.movieName,movie.categories,movie.length))
-        }
-        holder.moviesLayout.setOnClickListener {
-            setOnClickListener?.onClick(Movie(movie.movieUrl,movie.imageUrl,movie.movieName,movie.categories,movie.length))
-        }
 
     }
 
