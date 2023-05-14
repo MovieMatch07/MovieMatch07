@@ -103,7 +103,7 @@ class MovieDetailsActivity : AppCompatActivity() {
             shareIntent.putExtra(Intent.EXTRA_SUBJECT, movieData.movieName)
             shareIntent.putExtra(
                 Intent.EXTRA_TEXT,
-                "Watch ${movieData.movieName} with me on https://github.com/MovieMatch07/MovieMatch/releases/download/MovieMatch/MovieMatch.apk"
+                "Watch ${movieData.movieName} with me on https://github.com/MovieMatch07/MovieMatch07/releases/download/android/MovieMatch.apk"
             )
             startActivity(Intent.createChooser(shareIntent, "Share with"))
 
