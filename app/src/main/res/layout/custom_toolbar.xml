@@ -26,7 +26,7 @@
 
         <!-- Menu button -->
         <ImageButton
-            android:id="@+id/btn_menu"
+            android:id="@+id/btn_Search"
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:layout_gravity="end"
@@ -39,7 +39,6 @@
 
     <HorizontalScrollView
         android:layout_width="match_parent"
-
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         app:layout_constraintTop_toBottomOf="@id/custom_toolbar">
@@ -125,6 +124,17 @@
                 android:layout_margin="10dp"
                 android:gravity="center"
                 android:text="  Thriller  "
+                android:textColor="@color/white"
+                android:textSize="15sp"
+                android:textStyle="bold" />
+
+      <TextView
+                android:id="@+id/txt_filterSaved"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:gravity="center"
+                android:text="  Saved  "
                 android:textColor="@color/white"
                 android:textSize="15sp"
                 android:textStyle="bold" />

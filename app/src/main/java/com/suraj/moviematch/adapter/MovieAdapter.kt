@@ -13,7 +13,7 @@ import com.bumptech.glide.Glide
 import com.suraj.moviematch.R
 import com.suraj.moviematch.data.Movie
 
-class MovieAdapter(private val movies: List<Movie>) :
+class MovieAdapter(private val movies: ArrayList<Movie>, var listCode: Int) :
     RecyclerView.Adapter<MovieAdapter.ViewHolder>() {
 
     interface SetOnClickListener {
@@ -23,7 +23,6 @@ class MovieAdapter(private val movies: List<Movie>) :
     }
 
     var setOnClickListener: SetOnClickListener? = null
-
 
 
     inner class ViewHolder(val view: View) : RecyclerView.ViewHolder(view) {
@@ -68,6 +67,11 @@ class MovieAdapter(private val movies: List<Movie>) :
 
     }
 
-    override fun getItemCount() = movies.size - 1
+    override fun getItemCount(): Int {
+        if (listCode == 0) return movies.size - 1
+
+        else return movies.size
+
+    }
 
 }

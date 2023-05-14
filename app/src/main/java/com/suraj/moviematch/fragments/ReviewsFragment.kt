@@ -34,8 +34,6 @@ class ReviewsFragment : Fragment() {
 
         getMovieReviewList()
 
-
-
         setUpListener()
         return binding.root
     }
@@ -63,17 +61,25 @@ class ReviewsFragment : Fragment() {
 
                     if (movieReview != null) {
                         movieReviewList.add(movieReview)
-
                     }
 
                 }
+
                 reviewAdapter = ReviewAdapter(movieReviewList)
 
-                binding.rvMovieReview.layoutManager = LinearLayoutManager(requireContext(),LinearLayoutManager.HORIZONTAL,false)
+                binding.rvMovieReview.layoutManager = LinearLayoutManager(context,LinearLayoutManager.HORIZONTAL,false)
 
                 binding.rvMovieReview.adapter = reviewAdapter
 
-
+                if (movieReviewList.isEmpty())
+                {
+                    binding.txtListEmpty.visibility = View.VISIBLE
+                    binding.rvMovieReview.visibility = View.GONE
+                } else
+                {
+                    binding.txtListEmpty.visibility = View.GONE
+                    binding.rvMovieReview.visibility = View.VISIBLE
+                }
             }
 
             override fun onCancelled(databaseError: DatabaseError) {

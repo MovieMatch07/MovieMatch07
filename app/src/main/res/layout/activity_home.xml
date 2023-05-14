@@ -10,7 +10,6 @@
     tools:context=".activity.HomeActivity">
 
     <include
-
         layout="@layout/custom_toolbar" />
 
     <androidx.recyclerview.widget.RecyclerView

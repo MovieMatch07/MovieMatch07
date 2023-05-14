@@ -52,6 +52,7 @@ class AddReviewDialog(context: Context, val movieName: String) : Dialog(context)
             val userData = MovieReview(edtUserReview.text.toString()
                 ,ratingBar.rating
                 ,FirebaseAuth.getInstance().currentUser?.email.toString())
+
             FirebaseDatabase.getInstance().reference.child("reviews").child(txtMovieName.text.toString()).push().setValue(userData)
 
 

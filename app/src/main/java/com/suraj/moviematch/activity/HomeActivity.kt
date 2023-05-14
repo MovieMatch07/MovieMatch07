@@ -1,17 +1,29 @@
 package com.suraj.moviematch.activity
 
 import android.content.Intent
+import android.content.res.Configuration
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.View
+import android.widget.ImageButton
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.widget.Toolbar
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
 import com.google.gson.Gson
 import com.suraj.moviematch.R
 import com.suraj.moviematch.Utils.Utils
 import com.suraj.moviematch.adapter.MovieAdapter
+import com.suraj.moviematch.adapter.ReviewAdapter
+import com.suraj.moviematch.adapter.SavedMoviesAdapter
 import com.suraj.moviematch.data.Movie
 import com.suraj.moviematch.data.Movies
 import com.suraj.moviematch.data.getActionMovieJsonData
@@ -20,8 +32,9 @@ import com.suraj.moviematch.data.getAllMovieJsonData
 import com.suraj.moviematch.data.getAnimationMovieJsonData
 import com.suraj.moviematch.data.getComedyMovieJsonData
 import com.suraj.moviematch.data.getHorrorMovieJsonData
-import com.suraj.moviematch.data.getTeluguMovieJsonData
 import com.suraj.moviematch.data.getThrillerMovieJsonData
+import com.suraj.moviematch.dataClasses.MovieReview
+import com.suraj.moviematch.dataClasses.MoviesSaved
 
 class HomeActivity : AppCompatActivity() {
 
@@ -37,8 +50,12 @@ class HomeActivity : AppCompatActivity() {
     private lateinit var txt_filterThriller: TextView
     private lateinit var txt_filterAdventure: TextView
     private lateinit var txt_filterAnimation: TextView
+    private lateinit var txt_filterSaved: TextView
+    private lateinit var btn_Search: ImageButton
 
     private lateinit var movieAdapter: MovieAdapter
+
+    lateinit var layoutManager: StaggeredGridLayoutManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -55,7 +72,6 @@ class HomeActivity : AppCompatActivity() {
         setOnCLick()
 
 
-
     }
 
     private fun initview() {
@@ -69,6 +85,9 @@ class HomeActivity : AppCompatActivity() {
         txt_filterThriller = findViewById<TextView>(R.id.txt_filterThriller)
         txt_filterAdventure = findViewById<TextView>(R.id.txt_filterAdventure)
         txt_filterAnimation = findViewById<TextView>(R.id.txt_filterAnimation)
+        txt_filterSaved = findViewById<TextView>(R.id.txt_filterSaved)
+        btn_Search = findViewById<ImageButton>(R.id.btn_Search)
+
         rvHomeActivity = findViewById<RecyclerView>(R.id.rvHomeActivity)
 
     }
@@ -84,7 +103,15 @@ class HomeActivity : AppCompatActivity() {
         txt_filterThriller.setOnClickListener(onClickListener)
         txt_filterAdventure.setOnClickListener(onClickListener)
         txt_filterAnimation.setOnClickListener(onClickListener)
+        txt_filterSaved.setOnClickListener(onClickListener)
 
+
+        btn_Search.setOnClickListener {
+
+            val intent = Intent(this@HomeActivity,SearchActivity::class.java)
+            startActivity(intent)
+
+        }
 
     }
 
@@ -125,6 +152,10 @@ class HomeActivity : AppCompatActivity() {
                 R.id.txt_filterAnimation -> {
                     loadMoviesDataInRecyclerView("Animation")
                 }
+
+                R.id.txt_filterSaved -> {
+                    loadMoviesDataInRecyclerView("Saved")
+                }
             }
             movieAdapter.notifyDataSetChanged()
         }
@@ -135,6 +166,14 @@ class HomeActivity : AppCompatActivity() {
         var movieList = ArrayList<Movie>()
         val gson = Gson()
 
+        val orientation = resources.configuration.orientation
+
+        if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            layoutManager = StaggeredGridLayoutManager(4, StaggeredGridLayoutManager.VERTICAL)
+        } else {
+            layoutManager = StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
+        }
+
         setupUi(filter)
         when (filter) {
             "All" -> {
@@ -143,12 +182,10 @@ class HomeActivity : AppCompatActivity() {
                     Movies::class.java
                 ).movies as ArrayList<Movie>
 
-                val layoutManager =
-                    StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
 
                 rvHomeActivity.layoutManager = layoutManager
 
-                movieAdapter = MovieAdapter(movieList)
+                movieAdapter = MovieAdapter(movieList,0)
 
                 rvHomeActivity.adapter = movieAdapter
             }
@@ -158,11 +195,9 @@ class HomeActivity : AppCompatActivity() {
                     getActionMovieJsonData(),
                     Movies::class.java
                 ).movies as ArrayList<Movie>
-                val layoutManager =
-                    StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
 
                 rvHomeActivity.layoutManager = layoutManager
-                movieAdapter = MovieAdapter(movieList)
+                movieAdapter = MovieAdapter(movieList,0)
 
                 rvHomeActivity.adapter = movieAdapter
 
@@ -174,12 +209,11 @@ class HomeActivity : AppCompatActivity() {
                     Movies::class.java
                 ).movies as ArrayList<Movie>
 
-                val layoutManager =
-                    StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
+
 
                 rvHomeActivity.layoutManager = layoutManager
 
-                movieAdapter = MovieAdapter(movieList)
+                movieAdapter = MovieAdapter(movieList,0)
 
                 rvHomeActivity.adapter = movieAdapter
 
@@ -187,16 +221,15 @@ class HomeActivity : AppCompatActivity() {
 
             "Horror" -> {
                 movieList = gson.fromJson(
-                   getHorrorMovieJsonData(),
+                    getHorrorMovieJsonData(),
                     Movies::class.java
                 ).movies as ArrayList<Movie>
 
-                val layoutManager =
-                    StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
+
 
                 rvHomeActivity.layoutManager = layoutManager
 
-                movieAdapter = MovieAdapter(movieList)
+                movieAdapter = MovieAdapter(movieList,0)
 
                 rvHomeActivity.adapter = movieAdapter
 
@@ -208,12 +241,11 @@ class HomeActivity : AppCompatActivity() {
                     Movies::class.java
                 ).movies as ArrayList<Movie>
 
-                val layoutManager =
-                    StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
+
 
                 rvHomeActivity.layoutManager = layoutManager
 
-                movieAdapter = MovieAdapter(movieList)
+                movieAdapter = MovieAdapter(movieList,0)
 
                 rvHomeActivity.adapter = movieAdapter
 
@@ -225,12 +257,10 @@ class HomeActivity : AppCompatActivity() {
                     Movies::class.java
                 ).movies as ArrayList<Movie>
 
-                val layoutManager =
-                    StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
 
                 rvHomeActivity.layoutManager = layoutManager
 
-                movieAdapter = MovieAdapter(movieList)
+                movieAdapter = MovieAdapter(movieList,0)
 
                 rvHomeActivity.adapter = movieAdapter
 
@@ -242,16 +272,28 @@ class HomeActivity : AppCompatActivity() {
                     Movies::class.java
                 ).movies as ArrayList<Movie>
 
-                val layoutManager =
-                    StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
 
                 rvHomeActivity.layoutManager = layoutManager
 
-                movieAdapter = MovieAdapter(movieList)
+                movieAdapter = MovieAdapter(movieList,0)
 
                 rvHomeActivity.adapter = movieAdapter
 
             }
+
+
+            "Saved" -> {
+
+                movieList.clear()
+
+                rvHomeActivity.layoutManager = layoutManager
+
+                movieAdapter = MovieAdapter(movieList,0)
+
+                rvHomeActivity.adapter = movieAdapter
+
+            }
+
         }
 
         movieAdapter.setOnClickListener = SetOnClick()
@@ -299,6 +341,11 @@ class HomeActivity : AppCompatActivity() {
                 txt_filterAnimation.setTextColor(resources.getColor(R.color.red))
                 txt_filterAnimation.setBackgroundColor(resources.getColor(R.color.white))
             }
+
+            "Saved" -> {
+                txt_filterSaved.setTextColor(resources.getColor(R.color.red))
+                txt_filterSaved.setBackgroundColor(resources.getColor(R.color.white))
+            }
         }
     }
 
@@ -326,12 +373,13 @@ class HomeActivity : AppCompatActivity() {
         txt_filterAnimation.setTextColor(resources.getColor(R.color.white))
         txt_filterAnimation.setBackgroundColor(resources.getColor(R.color.purpleLight))
 
+        txt_filterSaved.setTextColor(resources.getColor(R.color.white))
+        txt_filterSaved.setBackgroundColor(resources.getColor(R.color.purpleLight))
+
     }
 
 
-
-
-  inner class SetOnClick : MovieAdapter.SetOnClickListener{
+    inner class SetOnClick : MovieAdapter.SetOnClickListener {
         override fun onClick(movie: Movie) {
             val intent = Intent(this@HomeActivity, MovieDetailsActivity::class.java)
             intent.putExtra("movie", movie)

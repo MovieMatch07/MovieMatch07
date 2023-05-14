@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/black"
+    tools:context=".activity.SearchActivity">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/custom_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:gravity="left"
+        app:title=""
+        android:background="@color/red">
+
+    <ImageView
+        android:id="@+id/imgBackArrow"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:src="@drawable/baseline_arrow_back_24"
+        android:scaleType="center"/>
+
+        <EditText
+            android:id="@+id/edtSearch"
+            android:textColorHint="@color/gray2"
+            android:hint="    Search Movie    "
+            android:textColor="@color/white"
+            android:textStyle="bold"
+            android:backgroundTint="@color/white"
+            android:foregroundTint="@color/transparent1"
+            android:drawableRight="@drawable/baseline_search_24"
+            android:textSize="16dp"
+            android:layout_margin="5dp"
+            android:padding="15dp"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"/>
+
+        <ImageView
+            android:id="@+id/imgClose"
+            android:focusedByDefault="true"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:src="@drawable/baseline_close_24"
+            android:layout_gravity="right|center"
+            android:scaleType="center"/>
+    </androidx.appcompat.widget.Toolbar>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvSearchMovie"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+
+</LinearLayout>

@@ -44,7 +44,7 @@ class ReviewAdapter(val movieReviewList: ArrayList<MovieReview>) :
 
         val data = movieReviewList[position]
 
-        holder.txtUser.text = data.user.toString()
+        holder.txtUser.text = "-${data.user.toString()}"
 
         holder.txtReview.text = data.review.toString()
 

@@ -1,12 +1,15 @@
 package com.suraj.moviematch.activity
 
 import android.content.Intent
+import android.content.res.Configuration
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
 import android.widget.Toast
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.bumptech.glide.Glide
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.FirebaseDatabase
 import com.google.gson.Gson
 import com.suraj.moviematch.R
 import com.suraj.moviematch.adapter.MovieAdapter
@@ -34,6 +37,9 @@ class MovieDetailsActivity : AppCompatActivity() {
     private var reviewsOpen = false
 
     private var reviewsFragment = ReviewsFragment()
+
+    private var isSaved = false
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -118,6 +124,36 @@ class MovieDetailsActivity : AppCompatActivity() {
             }
         }
 
+
+        binding.imgSave.setOnClickListener {
+
+
+// Get the user ID of the current user
+            val userId = FirebaseAuth.getInstance().currentUser?.uid
+
+// Create a reference to the location where you want to store the data
+            val userRef =
+                FirebaseDatabase.getInstance().reference.child("usersSaveData").child(userId.toString())
+
+
+            if (!isSaved) {
+
+                userRef.setValue(movieData)
+
+                binding.txtSaveMovie.text = "Saved"
+                isSaved = true
+
+            } else {
+
+                userRef.removeValue()
+
+                binding.txtSaveMovie.text = "Save"
+                isSaved = true
+
+            }
+        }
+
+
     }
 
     override fun onBackPressed() {
@@ -128,7 +164,7 @@ class MovieDetailsActivity : AppCompatActivity() {
 
     private fun loadDataInRecyclerView() {
 
-        var movieList : MutableList<Movie>? = ArrayList<Movie>()
+        var movieList: MutableList<Movie>? = ArrayList<Movie>()
         val gson = Gson()
 
         when {
@@ -207,12 +243,12 @@ class MovieDetailsActivity : AppCompatActivity() {
             }
         }
 
-    movieList.removeAt(movieList.size - 1)
+        movieList.removeAt(movieList.size - 1)
 
 
         val layoutManager = StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.HORIZONTAL)
         binding.rvRecommendation.layoutManager = layoutManager
-        movieAdapter = MovieAdapter(movieList)
+        movieAdapter = MovieAdapter(movieList,0)
         binding.rvRecommendation.adapter = movieAdapter
 
     }
