@@ -14,6 +14,7 @@ import com.suraj.moviematch.R
 import com.suraj.moviematch.data.Movie
 
 class MovieAdapter(private val movies: ArrayList<Movie>, var listCode: Int) :
+
     RecyclerView.Adapter<MovieAdapter.ViewHolder>() {
 
     interface SetOnClickListener {
@@ -52,7 +53,7 @@ class MovieAdapter(private val movies: ArrayList<Movie>, var listCode: Int) :
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
 
         val view = LayoutInflater.from(parent.context)
-            .inflate(R.layout.rv_movies_layout, null)
+            .inflate(R.layout.rv_movies_layout, parent,false)
         return ViewHolder(view)
 
     }
@@ -69,9 +70,7 @@ class MovieAdapter(private val movies: ArrayList<Movie>, var listCode: Int) :
 
     override fun getItemCount(): Int {
         if (listCode == 0) return movies.size - 1
-
         else return movies.size
-
     }
 
 }

@@ -126,30 +126,26 @@ class MovieDetailsActivity : AppCompatActivity() {
 
 
         binding.imgSave.setOnClickListener {
-
-
-// Get the user ID of the current user
+            // Get the user ID of the current user
             val userId = FirebaseAuth.getInstance().currentUser?.uid
 
-// Create a reference to the location where you want to store the data
-            val userRef =
-                FirebaseDatabase.getInstance().reference.child("usersSaveData").child(userId.toString())
-
+            // Create a reference to the location where you want to store the data
+            val userRef = FirebaseDatabase.getInstance().reference.child("usersSaveData").child(userId.toString())
 
             if (!isSaved) {
-
-                userRef.setValue(movieData)
+                // Generate a new unique key for the data entry
+                val newEntryRef = userRef.push()
+                // Set the value of the new entry using the generated key
+                newEntryRef.setValue(movieData)
 
                 binding.txtSaveMovie.text = "Saved"
                 isSaved = true
-
             } else {
-
+                // Remove the entire reference to remove all the saved data
                 userRef.removeValue()
 
                 binding.txtSaveMovie.text = "Save"
                 isSaved = true
-
             }
         }
 
@@ -246,7 +242,7 @@ class MovieDetailsActivity : AppCompatActivity() {
         movieList.removeAt(movieList.size - 1)
 
 
-        val layoutManager = StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.HORIZONTAL)
+        val layoutManager = StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
         binding.rvRecommendation.layoutManager = layoutManager
         movieAdapter = MovieAdapter(movieList,0)
         binding.rvRecommendation.adapter = movieAdapter

@@ -8,9 +8,7 @@ import android.util.Log
 import android.view.View
 import android.widget.ImageButton
 import android.widget.TextView
-import android.widget.Toast
 import androidx.appcompat.widget.Toolbar
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.google.firebase.auth.FirebaseAuth
@@ -20,10 +18,7 @@ import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.google.gson.Gson
 import com.suraj.moviematch.R
-import com.suraj.moviematch.Utils.Utils
 import com.suraj.moviematch.adapter.MovieAdapter
-import com.suraj.moviematch.adapter.ReviewAdapter
-import com.suraj.moviematch.adapter.SavedMoviesAdapter
 import com.suraj.moviematch.data.Movie
 import com.suraj.moviematch.data.Movies
 import com.suraj.moviematch.data.getActionMovieJsonData
@@ -33,8 +28,6 @@ import com.suraj.moviematch.data.getAnimationMovieJsonData
 import com.suraj.moviematch.data.getComedyMovieJsonData
 import com.suraj.moviematch.data.getHorrorMovieJsonData
 import com.suraj.moviematch.data.getThrillerMovieJsonData
-import com.suraj.moviematch.dataClasses.MovieReview
-import com.suraj.moviematch.dataClasses.MoviesSaved
 
 class HomeActivity : AppCompatActivity() {
 
@@ -108,7 +101,7 @@ class HomeActivity : AppCompatActivity() {
 
         btn_Search.setOnClickListener {
 
-            val intent = Intent(this@HomeActivity,SearchActivity::class.java)
+            val intent = Intent(this@HomeActivity, SearchActivity::class.java)
             startActivity(intent)
 
         }
@@ -185,7 +178,7 @@ class HomeActivity : AppCompatActivity() {
 
                 rvHomeActivity.layoutManager = layoutManager
 
-                movieAdapter = MovieAdapter(movieList,0)
+                movieAdapter = MovieAdapter(movieList, 0)
 
                 rvHomeActivity.adapter = movieAdapter
             }
@@ -197,7 +190,7 @@ class HomeActivity : AppCompatActivity() {
                 ).movies as ArrayList<Movie>
 
                 rvHomeActivity.layoutManager = layoutManager
-                movieAdapter = MovieAdapter(movieList,0)
+                movieAdapter = MovieAdapter(movieList, 0)
 
                 rvHomeActivity.adapter = movieAdapter
 
@@ -213,7 +206,7 @@ class HomeActivity : AppCompatActivity() {
 
                 rvHomeActivity.layoutManager = layoutManager
 
-                movieAdapter = MovieAdapter(movieList,0)
+                movieAdapter = MovieAdapter(movieList, 0)
 
                 rvHomeActivity.adapter = movieAdapter
 
@@ -229,7 +222,7 @@ class HomeActivity : AppCompatActivity() {
 
                 rvHomeActivity.layoutManager = layoutManager
 
-                movieAdapter = MovieAdapter(movieList,0)
+                movieAdapter = MovieAdapter(movieList, 0)
 
                 rvHomeActivity.adapter = movieAdapter
 
@@ -245,7 +238,7 @@ class HomeActivity : AppCompatActivity() {
 
                 rvHomeActivity.layoutManager = layoutManager
 
-                movieAdapter = MovieAdapter(movieList,0)
+                movieAdapter = MovieAdapter(movieList, 0)
 
                 rvHomeActivity.adapter = movieAdapter
 
@@ -260,7 +253,7 @@ class HomeActivity : AppCompatActivity() {
 
                 rvHomeActivity.layoutManager = layoutManager
 
-                movieAdapter = MovieAdapter(movieList,0)
+                movieAdapter = MovieAdapter(movieList, 0)
 
                 rvHomeActivity.adapter = movieAdapter
 
@@ -275,7 +268,7 @@ class HomeActivity : AppCompatActivity() {
 
                 rvHomeActivity.layoutManager = layoutManager
 
-                movieAdapter = MovieAdapter(movieList,0)
+                movieAdapter = MovieAdapter(movieList, 0)
 
                 rvHomeActivity.adapter = movieAdapter
 
@@ -286,9 +279,14 @@ class HomeActivity : AppCompatActivity() {
 
                 movieList.clear()
 
+
+
+                movieList =  getSavedMovies()
+//                Log.e("MyData",movieList[1].movieName.toString())
+
                 rvHomeActivity.layoutManager = layoutManager
 
-                movieAdapter = MovieAdapter(movieList,0)
+                movieAdapter = MovieAdapter(movieList, 0)
 
                 rvHomeActivity.adapter = movieAdapter
 
@@ -299,6 +297,51 @@ class HomeActivity : AppCompatActivity() {
         movieAdapter.setOnClickListener = SetOnClick()
 
         return movieList
+    }
+
+    private fun getSavedMovies(): ArrayList<Movie> {
+// Get the user ID of the current user
+        val userId = FirebaseAuth.getInstance().currentUser?.uid
+
+// Create a reference to the location where the data is stored
+
+       var movieList2 = ArrayList<Movie>()
+
+        val userRef = FirebaseDatabase.getInstance().reference.child("usersSaveData").child(userId.toString())
+
+// Add a ValueEventListener to listen for changes in the data
+        userRef.addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                // This method is called whenever the data at the location changes
+
+                // Clear the existing list to avoid duplicates
+
+
+                // Iterate through each child snapshot to retrieve individual entries
+                for (snapshot in dataSnapshot.children) {
+                    // Retrieve the movieData for each entry
+                    val movieData = snapshot.getValue(Movie::class.java)
+
+                    if (movieData != null) {
+                        movieList2.add(movieData)
+                    }
+                    Log.e("MyData",movieData?.movieName.toString())
+                    // Add the movieData to the ArrayList
+                    movieData?.let { movieList2.add(it) }
+                }
+
+                // Perform any operations with the updated movieDataList
+                // ...
+            }
+
+            override fun onCancelled(databaseError: DatabaseError) {
+                // This method is called if the ValueEventListener is canceled
+                // Handle any errors or interruptions here
+            }
+        })
+
+        return movieList2
+
     }
 
     private fun setupUi(selectFilter: String) {
