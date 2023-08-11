@@ -7,7 +7,7 @@ import com.bumptech.glide.Glide
 import com.suraj.moviematch.dataClasses.Movie
 import com.suraj.moviematch.databinding.RvMoviesLayoutBinding
 
-class MovieAdapter(private val listCode: Int) :
+class MovieAdapter(private var listCode: Int) :
     RecyclerView.Adapter<MovieAdapter.ViewHolder>() {
 
     private val moviesList = ArrayList<Movie>()
@@ -55,4 +55,9 @@ class MovieAdapter(private val listCode: Int) :
         moviesList.addAll(moviesList2)
         notifyDataSetChanged()
     }
+
+    fun listCode(listCode2 : Int) {
+        listCode = listCode2
+    }
+
 }

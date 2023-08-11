@@ -37,7 +37,6 @@ class MovieDetailsActivity : AppCompatActivity() {
     @Inject
     lateinit var movieViewModelFactory: MovieViewModelFactory
 
-    var isSaved = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -51,21 +50,21 @@ class MovieDetailsActivity : AppCompatActivity() {
         loadDataInRecyclerView()
         setUpViewModel()
         setUpListeners()
+        updateUI()
 
+    }
 
-        if (isSaved)
+    private fun updateUI() {
+        if (isMovieSaved())
             binding.imgSave.setImageResource(R.drawable.ic_save)
         else
             binding.imgSave.setImageResource(R.drawable.ic_unsave)
-
     }
 
     private fun initData() {
         val intent = intent
+
         movieData = intent.getSerializableExtra("movie") as Movie
-
-        // Set UI elements with movie data
-
 
         movieViewModel =
             ViewModelProvider(this, movieViewModelFactory).get(MovieViewModel::class.java)
@@ -128,18 +127,15 @@ class MovieDetailsActivity : AppCompatActivity() {
 
         binding.imgSave.setOnClickListener {
 
-            if (isSaved) {
+            if (isMovieSaved()) {
                 movieViewModel.deleteMovie(movieData)
-                Toast.makeText(this, "Delete", Toast.LENGTH_SHORT).show()
-                binding.imgSave.setImageResource(R.drawable.ic_unsave)
-
             } else {
                 movieViewModel.insertMovie(movieData)
-                Toast.makeText(this, "Save", Toast.LENGTH_SHORT).show()
-                binding.imgSave.setImageResource(R.drawable.ic_save)
             }
 
-
+            movieSavedList.clear()
+            movieViewModel.getAllMovies()
+            updateUI()
         }
 
         binding.layoutReview.setOnClickListener {
@@ -173,27 +169,28 @@ class MovieDetailsActivity : AppCompatActivity() {
 
     }
 
+    private fun isMovieSaved(): Boolean {
 
-    fun getSavedMovies() {
-        movieViewModel.getAllMovies()
-        movieViewModel.movieSavedList.observe(this) {
-            if (it != null) {
-                movieSavedList.addAll(it)
-                Log.e("getSavedMovies", "${it}")
-                for (m in it){
-                    if (m == movieData) isSaved = true
-                }
-
-            }
+        for (m in movieSavedList) {
+            if (m.imageUrl.toString().contains(movieData.imageUrl)) return true
         }
-        movieViewModel.getAllMovies()
+        return false
     }
 
 
+    fun getSavedMovies() {
+        movieViewModel.movieSavedList.observe(this) {
+            if (it != null) {
+                movieSavedList.addAll(it)
+                updateUI()
+            }
+        }
+        movieViewModel.getAllMovies()
+
+    }
+
 
     override fun onBackPressed() {
-        val intent = Intent(this@MovieDetailsActivity, HomeActivity::class.java)
-        startActivity(intent)
         finish()
     }
 

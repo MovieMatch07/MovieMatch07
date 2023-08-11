@@ -58,6 +58,7 @@ class MovieViewModel(private var movieRepository: MoviesRepository) : ViewModel(
         viewModelScope.launch {
             var savedMovies = movieRepository.getAllMovies()
             _movieSavedList.postValue(savedMovies)
+            Log.e("GetSavedMoviesData","$_movieSavedList")
         }
     }
 

@@ -2,6 +2,7 @@ package com.suraj.moviematch.activity
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
@@ -47,7 +48,6 @@ class HomeActivity : AppCompatActivity() {
         setOnClick()
         setUpViewModel()
 
-        // Load movies with "All" filter and select the corresponding TextView
         movieViewModel.loadMoviesByFilter("All")
         selectedFilterTextView = binding.txtFilterAll
         selectFilterTextView(selectedFilterTextView)
@@ -56,7 +56,6 @@ class HomeActivity : AppCompatActivity() {
     private fun initViews() {
 
         movieViewModel = ViewModelProvider(this, movieViewModelFactory).get(MovieViewModel::class.java)
-
         layoutManager = StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
         binding.rvHomeActivity.layoutManager = layoutManager
         movieAdapter = MovieAdapter(0)
@@ -73,6 +72,7 @@ class HomeActivity : AppCompatActivity() {
         binding.txtFilterThriller.setOnClickListener(onClickListener)
         binding.txtFilterAdventure.setOnClickListener(onClickListener)
         binding.txtFilterAnimation.setOnClickListener(onClickListener)
+        binding.txtFilterSaved.setOnClickListener(onClickListener)
 
         binding.btnSearch.setOnClickListener {
             val intent = Intent(this@HomeActivity, SearchActivity::class.java)
@@ -82,6 +82,8 @@ class HomeActivity : AppCompatActivity() {
 
     private inner class OnClickListener : View.OnClickListener {
         override fun onClick(view: View?) {
+
+            movieAdapter.listCode(0)
             val previousSelectedFilterTextView = selectedFilterTextView
             selectedFilterTextView = view ?: binding.txtFilterAll
             selectFilterTextView(selectedFilterTextView)
@@ -94,8 +96,24 @@ class HomeActivity : AppCompatActivity() {
                 R.id.txt_filterThriller -> movieViewModel.loadMoviesByFilter("Thriller")
                 R.id.txt_filterAdventure -> movieViewModel.loadMoviesByFilter("Adventure")
                 R.id.txt_filterAnimation -> movieViewModel.loadMoviesByFilter("Animation")
+                R.id.txt_filterSaved -> getSavedMovies()
             }
         }
+    }
+
+    private fun getSavedMovies() {
+
+
+        movieViewModel.movieSavedList.observe(this){
+            if (it != null) {
+                movieAdapter.listCode(1)
+                movieAdapter.addAll(it)
+            }
+        }
+
+        movieViewModel.getAllMovies()
+
+
     }
 
     private fun setUpViewModel() {
@@ -127,7 +145,10 @@ class HomeActivity : AppCompatActivity() {
             val intent = Intent(this@HomeActivity, MovieDetailsActivity::class.java)
             intent.putExtra("movie", movie)
             startActivity(intent)
-            finish()
         }
+    }
+
+    override fun onRestart() {
+        super.onRestart()
     }
 }
