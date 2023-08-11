@@ -1,252 +1,200 @@
 package com.suraj.moviematch.activity
 
 import android.content.Intent
-import android.content.res.Configuration
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.widget.Button
+import android.util.Log
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.bumptech.glide.Glide
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.database.FirebaseDatabase
-import com.google.gson.Gson
 import com.suraj.moviematch.R
 import com.suraj.moviematch.adapter.MovieAdapter
-import com.suraj.moviematch.data.Movie
-import com.suraj.moviematch.data.Movies
-import com.suraj.moviematch.data.getActionMovieJsonData
-import com.suraj.moviematch.data.getAdventureMovieJsonData
-import com.suraj.moviematch.data.getAllMovieJsonData
-import com.suraj.moviematch.data.getAnimationMovieJsonData
-import com.suraj.moviematch.data.getComedyMovieJsonData
-import com.suraj.moviematch.data.getHorrorMovieJsonData
-import com.suraj.moviematch.data.getThrillerMovieJsonData
+import com.suraj.moviematch.app.MyApplication
+import com.suraj.moviematch.dataClasses.Movie
 import com.suraj.moviematch.databinding.ActivityMovieDetailsBinding
-import com.suraj.moviematch.dialogs.AddReviewDialog
 import com.suraj.moviematch.fragments.ReviewsFragment
+import com.suraj.moviematch.repository.MoviesRepository
+import com.suraj.moviematch.viewModel.MovieViewModel
+import com.suraj.moviematch.viewModel.MovieViewModelFactory
+import javax.inject.Inject
 
 class MovieDetailsActivity : AppCompatActivity() {
 
-    lateinit var binding: ActivityMovieDetailsBinding
-    private var movieUrl = ""
-    private var recommendation = ""
+    private lateinit var binding: ActivityMovieDetailsBinding
     private lateinit var movieData: Movie
     private lateinit var movieAdapter: MovieAdapter
-
     private var reviewsOpen = false
+    private lateinit var movieViewModel: MovieViewModel
+    private var moviesList = ArrayList<Movie>()
+    private var movieSavedList = ArrayList<Movie>()
+    private val reviewsFragment = ReviewsFragment()
 
-    private var reviewsFragment = ReviewsFragment()
+    @Inject
+    lateinit var movieRepository: MoviesRepository
 
-    private var isSaved = false
+    @Inject
+    lateinit var movieViewModelFactory: MovieViewModelFactory
+
+    var isSaved = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         binding = ActivityMovieDetailsBinding.inflate(layoutInflater)
-
         setContentView(binding.root)
 
+        (application as MyApplication).movieComponent.inject(this)
+
         initData()
-
+        getSavedMovies()
         loadDataInRecyclerView()
+        setUpViewModel()
+        setUpListeners()
 
-        setUpListener()
+
+        if (isSaved)
+            binding.imgSave.setImageResource(R.drawable.ic_save)
+        else
+            binding.imgSave.setImageResource(R.drawable.ic_unsave)
 
     }
 
-
     private fun initData() {
-
-        val intent = getIntent()
+        val intent = intent
         movieData = intent.getSerializableExtra("movie") as Movie
 
-        movieUrl = movieData.movieUrl
+        // Set UI elements with movie data
+
+
+        movieViewModel =
+            ViewModelProvider(this, movieViewModelFactory).get(MovieViewModel::class.java)
 
         binding.txtMovieName.text = movieData.movieName.toString()
-
-        recommendation = movieData.categories[0]
-
-        binding.txtMovieGenres.text = buildString {
-            append(movieData.categories[0])
-            append(", ")
-            append(movieData.categories[1])
-        }
-
-
+        binding.txtMovieGenres.text = movieData.categories.joinToString(", ")
         binding.txtMovieDuration.text = movieData.length.toString()
 
-
-        Glide.with(this@MovieDetailsActivity).load(movieData.imageUrl).into(binding.imgMovie)
-        Glide.with(this@MovieDetailsActivity).load(movieData.imageUrl).into(binding.imgBackGround)
-
+        Glide.with(this@MovieDetailsActivity)
+            .load(movieData.imageUrl)
+            .into(binding.imgMovie)
 
         val bundle = Bundle()
         bundle.putString("MovieName", movieData.movieName.toString())
-
         reviewsFragment.arguments = bundle
+
+
     }
 
-    private fun setUpListener() {
 
-        binding.btnPlayMovie.setOnClickListener {
-            val intent = Intent(this@MovieDetailsActivity, PlayMoviesActivity::class.java)
-            intent.putExtra("movieUrl", movieUrl)
-            startActivity(intent)
-            finish()
-        }
+    private fun loadDataInRecyclerView() {
 
-        binding.imgShare.setOnClickListener {
+        movieViewModel.loadMoviesByFilter(movieData.categories[0])
 
-            val shareIntent = Intent(Intent.ACTION_SEND)
-            shareIntent.type = "text/plain"
-            shareIntent.putExtra(Intent.EXTRA_SUBJECT, movieData.movieName)
-            shareIntent.putExtra(
-                Intent.EXTRA_TEXT,
-                "Watch ${movieData.movieName} with me on https://github.com/MovieMatch07/MovieMatch07/releases/download/android/MovieMatch.apk"
-            )
-            startActivity(Intent.createChooser(shareIntent, "Share with"))
+        val layoutManager = StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
 
-        }
+        binding.rvRecommendation.layoutManager = layoutManager
+
+        movieAdapter = MovieAdapter(0)
+
+        binding.rvRecommendation.adapter = movieAdapter
 
         movieAdapter.setOnClickListener = SetOnClick()
 
 
-        binding.layoutReview.setOnClickListener {
+    }
 
+
+    private fun setUpViewModel() {
+        movieViewModel.movieList.observe(this) {
+
+            if (it.isNotEmpty()) {
+                moviesList.clear()
+                moviesList.addAll(it)
+                movieAdapter.addAll(moviesList)
+            }
+        }
+    }
+
+
+    private fun setUpListeners() {
+        binding.btnPlayMovie.setOnClickListener {
+            val intent = Intent(this@MovieDetailsActivity, PlayMoviesActivity::class.java)
+            intent.putExtra("movieUrl", movieData.movieUrl)
+            startActivity(intent)
+            finish()
+        }
+
+        // Other listeners setup
+
+        binding.imgSave.setOnClickListener {
+
+            if (isSaved) {
+                movieViewModel.deleteMovie(movieData)
+                Toast.makeText(this, "Delete", Toast.LENGTH_SHORT).show()
+                binding.imgSave.setImageResource(R.drawable.ic_unsave)
+
+            } else {
+                movieViewModel.insertMovie(movieData)
+                Toast.makeText(this, "Save", Toast.LENGTH_SHORT).show()
+                binding.imgSave.setImageResource(R.drawable.ic_save)
+            }
+
+
+        }
+
+        binding.layoutReview.setOnClickListener {
             if (!reviewsOpen) {
-                supportFragmentManager.beginTransaction().add(R.id.mainContainer, reviewsFragment)
+                supportFragmentManager.beginTransaction()
+                    .add(R.id.mainContainer, reviewsFragment)
                     .commit()
                 reviewsOpen = true
             } else {
-                supportFragmentManager.beginTransaction().remove(reviewsFragment).commit()
+                supportFragmentManager.beginTransaction()
+                    .remove(reviewsFragment)
+                    .commit()
                 reviewsOpen = false
             }
         }
 
 
-        binding.imgSave.setOnClickListener {
-            // Get the user ID of the current user
-            val userId = FirebaseAuth.getInstance().currentUser?.uid
-
-            // Create a reference to the location where you want to store the data
-            val userRef = FirebaseDatabase.getInstance().reference.child("usersSaveData").child(userId.toString())
-
-            if (!isSaved) {
-                // Generate a new unique key for the data entry
-                val newEntryRef = userRef.push()
-                // Set the value of the new entry using the generated key
-                newEntryRef.setValue(movieData)
-
-                binding.txtSaveMovie.text = "Saved"
-                isSaved = true
-            } else {
-                // Remove the entire reference to remove all the saved data
-                userRef.removeValue()
-
-                binding.txtSaveMovie.text = "Save"
-                isSaved = true
-            }
+        binding.imgShare.setOnClickListener {
+            val shareIntent = Intent(Intent.ACTION_SEND)
+            shareIntent.type = "text/plain"
+            shareIntent.putExtra(
+                Intent.EXTRA_SUBJECT,
+                getString(R.string.app_name)
+            )
+            shareIntent.putExtra(
+                Intent.EXTRA_TEXT,
+                "Download the app from: https://github.com/MovieMatch07/MovieMatch07/releases/download/android/MovieMatch.apk"
+            )
+            startActivity(Intent.createChooser(shareIntent, "Share App using"))
         }
 
-
     }
+
+
+    fun getSavedMovies() {
+        movieViewModel.getAllMovies()
+        movieViewModel.movieSavedList.observe(this) {
+            if (it != null) {
+                movieSavedList.addAll(it)
+                Log.e("getSavedMovies", "${it}")
+                for (m in it){
+                    if (m == movieData) isSaved = true
+                }
+
+            }
+        }
+        movieViewModel.getAllMovies()
+    }
+
+
 
     override fun onBackPressed() {
         val intent = Intent(this@MovieDetailsActivity, HomeActivity::class.java)
         startActivity(intent)
         finish()
-    }
-
-    private fun loadDataInRecyclerView() {
-
-        var movieList: MutableList<Movie>? = ArrayList<Movie>()
-        val gson = Gson()
-
-        when {
-
-            recommendation == "Action" -> {
-
-                movieList = gson.fromJson(
-                    getActionMovieJsonData(),
-                    Movies::class.java
-                ).movies as ArrayList<Movie>
-
-            }
-
-            recommendation == "Adventure" -> {
-
-                movieList = gson.fromJson(
-                    getAdventureMovieJsonData(),
-                    Movies::class.java
-                ).movies as ArrayList<Movie>
-
-            }
-
-            recommendation == "Animation" -> {
-
-                movieList = gson.fromJson(
-                    getAnimationMovieJsonData(),
-                    Movies::class.java
-                ).movies as ArrayList<Movie>
-
-            }
-
-            recommendation == "Comedy" -> {
-
-                movieList = gson.fromJson(
-                    getComedyMovieJsonData(),
-                    Movies::class.java
-                ).movies as ArrayList<Movie>
-
-            }
-
-            recommendation == "Horror" -> {
-
-                movieList = gson.fromJson(
-                    getHorrorMovieJsonData(),
-                    Movies::class.java
-                ).movies as ArrayList<Movie>
-
-            }
-
-
-            recommendation == "Thriller" -> {
-
-                movieList = gson.fromJson(
-                    getThrillerMovieJsonData(),
-                    Movies::class.java
-                ).movies as ArrayList<Movie>
-
-            }
-
-            else -> {
-                movieList = gson.fromJson(
-                    getAllMovieJsonData(),
-                    Movies::class.java
-                ).movies as ArrayList<Movie>
-
-            }
-
-        }
-
-
-        val iterator = movieList.iterator()
-        while (iterator.hasNext()) {
-            val movie = iterator.next()
-            if (movie == movieData) {
-                iterator.remove()
-            }
-        }
-
-        movieList.removeAt(movieList.size - 1)
-
-
-        val layoutManager = StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
-        binding.rvRecommendation.layoutManager = layoutManager
-        movieAdapter = MovieAdapter(movieList,0)
-        binding.rvRecommendation.adapter = movieAdapter
-
     }
 
     inner class SetOnClick : MovieAdapter.SetOnClickListener {
@@ -257,6 +205,4 @@ class MovieDetailsActivity : AppCompatActivity() {
             finish()
         }
     }
-
-
 }

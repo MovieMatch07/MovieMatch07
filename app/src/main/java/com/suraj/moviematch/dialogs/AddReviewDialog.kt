@@ -12,9 +12,12 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
 import com.suraj.moviematch.R
 import com.suraj.moviematch.dataClasses.MovieReview
+import com.suraj.moviematch.viewModel.MovieViewModel
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
-
-class AddReviewDialog(context: Context, val movieName: String) : Dialog(context) {
+class AddReviewDialog(context: Context, val movieName: String, val movieViewModel: MovieViewModel) : Dialog(context) {
 
     private lateinit var txtMovieName: TextView
     private lateinit var imgCloseDialog: ImageView
@@ -49,14 +52,13 @@ class AddReviewDialog(context: Context, val movieName: String) : Dialog(context)
         btnSave.setOnClickListener {
             Toast.makeText(context, "${ratingBar.rating} ", Toast.LENGTH_SHORT).show()
 
-            val userData = MovieReview(edtUserReview.text.toString()
+            val movieData = MovieReview(edtUserReview.text.toString()
                 ,ratingBar.rating
                 ,FirebaseAuth.getInstance().currentUser?.email.toString())
 
-            FirebaseDatabase.getInstance().reference.child("reviews").child(txtMovieName.text.toString()).push().setValue(userData)
-
-
+            addReviewToFirestore(movieName,movieData)
             dismiss()
+            movieViewModel.getReviews(movieName)
         }
 
         imgCloseDialog.setOnClickListener {
@@ -64,7 +66,13 @@ class AddReviewDialog(context: Context, val movieName: String) : Dialog(context)
             dismiss()
         }
 
+    }
 
+
+    private fun addReviewToFirestore(movieName: String, review: MovieReview) {
+        CoroutineScope(Dispatchers.Main).launch {
+            movieViewModel.addReview(movieName, review)
+        }
     }
 
 }

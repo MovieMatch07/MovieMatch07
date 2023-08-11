@@ -1,91 +1,113 @@
 package com.suraj.moviematch.fragments
 
+import android.app.Dialog
+import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
+import android.widget.EditText
+import android.widget.ImageView
+import android.widget.RatingBar
+import android.widget.TextView
 import android.widget.Toast
-import androidx.recyclerview.widget.GridLayoutManager
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.database.ValueEventListener
+import com.google.firebase.auth.FirebaseAuth
+import com.suraj.moviematch.R
 import com.suraj.moviematch.adapter.ReviewAdapter
+import com.suraj.moviematch.app.MyApplication
 import com.suraj.moviematch.dataClasses.MovieReview
 import com.suraj.moviematch.databinding.FragmentReviewsBinding
 import com.suraj.moviematch.dialogs.AddReviewDialog
+import com.suraj.moviematch.repository.MoviesRepository
+import com.suraj.moviematch.viewModel.MovieViewModel
+import com.suraj.moviematch.viewModel.MovieViewModelFactory
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import javax.inject.Inject
+
 
 class ReviewsFragment : Fragment() {
 
     private lateinit var binding: FragmentReviewsBinding
     private var movieName = ""
     private var movieReviewList = ArrayList<MovieReview>()
-    private lateinit var reviewAdapter : ReviewAdapter
+    private lateinit var reviewAdapter: ReviewAdapter
+    private lateinit var movieViewModel: MovieViewModel
+    @Inject
+    lateinit var movieRepository: MoviesRepository
+
+    @Inject
+    lateinit var movieViewModelFactory: MovieViewModelFactory
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentReviewsBinding.inflate(inflater, container, false)
 
+        (requireActivity().application as MyApplication).movieComponent.inject(this)
+
+        initViewModel()
+
         val bundle = arguments
         movieName = bundle?.getString("MovieName").toString()
 
-        getMovieReviewList()
+        // Initialize the adapter and layout manager
+        reviewAdapter = ReviewAdapter(movieReviewList)
+        binding.rvMovieReview.layoutManager =
+            LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+        binding.rvMovieReview.adapter = reviewAdapter
 
         setUpListener()
+        getReviewsFromFirestore(movieName)
         return binding.root
     }
 
+    private fun initViewModel() {
 
+        movieViewModel = ViewModelProvider(this, movieViewModelFactory).get(MovieViewModel::class.java)
+    }
 
     private fun setUpListener() {
         binding.btnAddReview.setOnClickListener {
-            val addReviewDialog = AddReviewDialog(requireContext(), movieName)
+            val addReviewDialog = AddReviewDialog(requireContext(), movieName,movieViewModel)
             addReviewDialog.show()
         }
     }
 
-    private fun getMovieReviewList() {
-        val databaseReference =
-            FirebaseDatabase.getInstance().reference.child("reviews").child(movieName)
 
-        databaseReference.addValueEventListener(object : ValueEventListener {
-            override fun onDataChange(dataSnapshot: DataSnapshot) {
 
-                movieReviewList.clear()
 
-                for (snapshot in dataSnapshot.children) {
-                    val movieReview = snapshot.getValue(MovieReview::class.java)
+    private fun getReviewsFromFirestore(movieName: String) {
+        CoroutineScope(Dispatchers.Main).launch {
 
-                    if (movieReview != null) {
-                        movieReviewList.add(movieReview)
-                    }
+
+            movieViewModel.movieReviewList.observe(viewLifecycleOwner) {
+                if (it != null) {
+                    movieReviewList.addAll(it)
+
+                    Log.e("movieReviewList","$it")
 
                 }
 
-                reviewAdapter = ReviewAdapter(movieReviewList)
-
-                binding.rvMovieReview.layoutManager = LinearLayoutManager(context,LinearLayoutManager.HORIZONTAL,false)
-
-                binding.rvMovieReview.adapter = reviewAdapter
-
-                if (movieReviewList.isEmpty())
-                {
+                if (movieReviewList.isEmpty()) {
                     binding.txtListEmpty.visibility = View.VISIBLE
                     binding.rvMovieReview.visibility = View.GONE
-                } else
-                {
+                } else {
                     binding.txtListEmpty.visibility = View.GONE
                     binding.rvMovieReview.visibility = View.VISIBLE
                 }
+
             }
 
-            override fun onCancelled(databaseError: DatabaseError) {
-                Toast.makeText(requireContext(), "Error while Reading Reviews Data", Toast.LENGTH_SHORT).show()
-            }
-        })
+            movieViewModel.getReviews(movieName)
+        }
     }
 
 

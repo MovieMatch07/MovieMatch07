@@ -4,6 +4,4 @@ data class MovieReview(
     var review: String? = null,
     var rating: Float? = null,
     var user: String? = null
-) {
-    constructor() : this("", 0f, "")
-}
+)

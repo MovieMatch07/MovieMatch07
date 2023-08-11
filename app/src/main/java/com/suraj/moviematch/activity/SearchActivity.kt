@@ -6,14 +6,11 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import androidx.core.widget.addTextChangedListener
-import androidx.core.widget.doOnTextChanged
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.google.gson.Gson
-import com.suraj.moviematch.R
 import com.suraj.moviematch.adapter.MovieAdapter
-import com.suraj.moviematch.adapter.SavedMoviesAdapter
-import com.suraj.moviematch.data.Movie
-import com.suraj.moviematch.data.Movies
+import com.suraj.moviematch.dataClasses.Movie
+import com.suraj.moviematch.dataClasses.Movies
 import com.suraj.moviematch.data.getAllMovieJsonData
 import com.suraj.moviematch.databinding.ActivitySearchBinding
 
@@ -84,7 +81,7 @@ class SearchActivity : AppCompatActivity() {
                 }
             }
         }
-        movieAdapter = MovieAdapter(filteredList, 1)
+        movieAdapter = MovieAdapter( 1)
 
         binding.rvSearchMovie.adapter = movieAdapter
 
