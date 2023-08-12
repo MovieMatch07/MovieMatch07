@@ -60,4 +60,9 @@ class MovieAdapter(private var listCode: Int) :
         listCode = listCode2
     }
 
+    fun clearList() {
+        moviesList.clear()
+        notifyDataSetChanged()
+    }
+
 }

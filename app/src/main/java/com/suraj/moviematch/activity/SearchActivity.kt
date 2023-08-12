@@ -4,100 +4,99 @@ import android.content.Intent
 import android.content.res.Configuration
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import androidx.core.widget.addTextChangedListener
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.google.gson.Gson
 import com.suraj.moviematch.adapter.MovieAdapter
+import com.suraj.moviematch.app.MyApplication
 import com.suraj.moviematch.dataClasses.Movie
 import com.suraj.moviematch.dataClasses.Movies
 import com.suraj.moviematch.data.getAllMovieJsonData
 import com.suraj.moviematch.databinding.ActivitySearchBinding
+import com.suraj.moviematch.repository.MoviesRepository
+import com.suraj.moviematch.viewModel.MovieViewModel
+import com.suraj.moviematch.viewModel.MovieViewModelFactory
+import javax.inject.Inject
 
 class SearchActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivitySearchBinding
-    var movieList = ArrayList<Movie>()
     private lateinit var movieAdapter: MovieAdapter
-    lateinit var layoutManager: StaggeredGridLayoutManager
+    private lateinit var layoutManager: StaggeredGridLayoutManager
+    private lateinit var movieViewModel: MovieViewModel
+    private val movieList = ArrayList<Movie>()
+
+    @Inject
+    lateinit var movieRepository: MoviesRepository
+
+    @Inject
+    lateinit var movieViewModelFactory: MovieViewModelFactory
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         binding = ActivitySearchBinding.inflate(layoutInflater)
-
         setContentView(binding.root)
+
+        (application as MyApplication).movieComponent.inject(this)
 
         binding.edtSearch.requestFocus()
 
-
-        initData()
-
+        initViews()
         setOnClick()
-
-
+        setUpViewModel()
     }
 
-    private fun initData() {
+    private fun initViews() {
+        movieViewModel = ViewModelProvider(this, movieViewModelFactory).get(MovieViewModel::class.java)
 
-        val orientation = resources.configuration.orientation
-
-        if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
-            layoutManager = StaggeredGridLayoutManager(4, StaggeredGridLayoutManager.VERTICAL)
-        } else {
-            layoutManager = StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
-        }
+        layoutManager = StaggeredGridLayoutManager(
+            if (resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE) 4 else 2,
+            StaggeredGridLayoutManager.VERTICAL
+        )
 
         val gson = Gson()
-
-
-        movieList = gson.fromJson(
-            getAllMovieJsonData(),
-            Movies::class.java
-        ).movies as ArrayList<Movie>
-
-
-
+        val movies = gson.fromJson(getAllMovieJsonData(), Movies::class.java)
+        movieList.addAll(movies.movies)
 
         binding.rvSearchMovie.layoutManager = layoutManager
 
+        movieAdapter = MovieAdapter(1)
+        binding.rvSearchMovie.adapter = movieAdapter
+        movieAdapter.setOnClickListener = SetOnClick()
     }
 
+    private fun setUpViewModel() {
+        movieViewModel.movieList.observe(this) {
+            movieList.addAll(it)
+            movieAdapter.addAll(movieList)
+        }
+        movieViewModel.loadMoviesByFilter("All")
+    }
 
     private fun filterMovies(query: String) {
-        var filteredList = ArrayList<Movie>()
+        val uniqueMovieNames = HashSet<String>() // To store unique movie names
+        val filteredList = mutableListOf<Movie>()
 
-        if (query.isEmpty() || query.isBlank()){
-
-        }
-        else {
-
-            for (movie in movieList) {
-                if (movie != null && movie.movieName.trim().lowercase()
-                        .contains(query.trim().lowercase()) && query.isNotEmpty()
-                ) {
+        for (movie in movieList) {
+            val lowercaseMovieName = movie?.movieName?.trim()?.lowercase()
+            if (lowercaseMovieName != null && lowercaseMovieName.contains(query.trim().lowercase())) {
+                // Check if the movie name is unique, then add it to the filtered list
+                if (uniqueMovieNames.add(lowercaseMovieName)) {
                     filteredList.add(movie)
-                    Log.e("MovieData", movie.movieName)
                 }
             }
         }
-        movieAdapter = MovieAdapter( 1)
 
-        binding.rvSearchMovie.adapter = movieAdapter
-
-        movieAdapter.setOnClickListener = SetOnClick()
+        movieAdapter.clearList() // Clear the previous list
+        movieAdapter.addAll(filteredList) // Add the filtered list
     }
 
 
     private fun setOnClick() {
-
-
         binding.edtSearch.addTextChangedListener {
-
-            if (binding.edtSearch.text.toString().trim().isNotEmpty()) filterMovies(binding.edtSearch.text.toString().trim())
-
+            filterMovies(it.toString().trim())
         }
-
 
         binding.imgBackArrow.setOnClickListener {
             val intent = Intent(this@SearchActivity, HomeActivity::class.java)
@@ -109,9 +108,7 @@ class SearchActivity : AppCompatActivity() {
             binding.edtSearch.setText("")
             filterMovies("")
         }
-
     }
-
 
     inner class SetOnClick : MovieAdapter.SetOnClickListener {
         override fun onClick(movie: Movie) {
@@ -119,8 +116,6 @@ class SearchActivity : AppCompatActivity() {
             intent.putExtra("movie", movie)
             startActivity(intent)
             finish()
-
         }
     }
-
 }

@@ -45,8 +45,9 @@ class HomeActivity : AppCompatActivity() {
         supportActionBar?.setDisplayShowTitleEnabled(false)
 
         initViews()
-        setOnClick()
         setUpViewModel()
+        setOnClick()
+
 
         movieViewModel.loadMoviesByFilter("All")
         selectedFilterTextView = binding.txtFilterAll
@@ -120,6 +121,7 @@ class HomeActivity : AppCompatActivity() {
         movieViewModel.movieList.observe(this) {
             movieAdapter.addAll(it)
         }
+        movieViewModel.loadMoviesByFilter("All")
     }
 
     private fun selectFilterTextView(textView: View) {
