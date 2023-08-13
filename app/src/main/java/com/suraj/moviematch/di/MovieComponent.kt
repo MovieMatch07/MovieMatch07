@@ -5,6 +5,7 @@ import com.suraj.moviematch.activity.HomeActivity
 import com.suraj.moviematch.activity.MovieDetailsActivity
 import com.suraj.moviematch.fragments.HomeFragment
 import com.suraj.moviematch.fragments.ReviewsFragment
+import com.suraj.moviematch.fragments.TrendingFragment
 import dagger.Component
 import javax.inject.Singleton
 
@@ -18,6 +19,7 @@ interface MovieComponent {
 
     fun inject(reviewsFragment: ReviewsFragment)
     fun inject(homeFragment: HomeFragment)
+    fun inject(trendingFragment: TrendingFragment)
 
 
 }

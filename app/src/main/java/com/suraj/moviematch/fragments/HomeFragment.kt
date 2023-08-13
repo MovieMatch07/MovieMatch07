@@ -84,6 +84,10 @@ class HomeFragment : Fragment() {
         binding.txtFilterAnimation.setOnClickListener(onClickListener)
         binding.txtFilterSaved.setOnClickListener(onClickListener)
 
+        binding.btnSearch.setOnClickListener {
+            val intent = Intent(requireContext(), SearchActivity::class.java)
+            startActivity(intent)
+        }
 
     }
 

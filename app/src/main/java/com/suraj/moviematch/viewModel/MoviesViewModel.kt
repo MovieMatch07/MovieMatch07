@@ -9,6 +9,7 @@ import androidx.lifecycle.viewModelScope
 import com.google.firebase.auth.FirebaseAuth
 import com.suraj.moviematch.dataClasses.Movie
 import com.suraj.moviematch.dataClasses.MovieReview
+import com.suraj.moviematch.dataClasses.Shorts
 import com.suraj.moviematch.db.DatabaseProvider
 import com.suraj.moviematch.db.MovieDao
 import com.suraj.moviematch.repository.MoviesRepository
@@ -32,6 +33,10 @@ class MovieViewModel(private var movieRepository: MoviesRepository) : ViewModel(
     val movieSavedList: LiveData<List<Movie>?>
         get() = _movieSavedList
 
+
+
+    private val _shortsLiveData = MutableLiveData<List<Shorts>>()
+    val shortsLiveData: LiveData<List<Shorts>> = _shortsLiveData
 
     fun loadMoviesByFilter(filter: String) {
         val movies = movieRepository.getMoviesByFilter(filter)
@@ -75,6 +80,16 @@ class MovieViewModel(private var movieRepository: MoviesRepository) : ViewModel(
         }
     }
 
+
+    fun addShort(short: Shorts) {
+        movieRepository.addShort(short)
+    }
+
+    fun getShorts() {
+        movieRepository.getShorts { shortsList ->
+            _shortsLiveData.postValue(shortsList)
+        }
+    }
 
 }
 

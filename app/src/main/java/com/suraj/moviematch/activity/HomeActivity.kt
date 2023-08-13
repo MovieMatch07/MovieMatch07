@@ -36,11 +36,6 @@ class HomeActivity : AppCompatActivity() {
         (application as MyApplication).movieComponent.inject(this)
 
 
-        setSupportActionBar(binding.customToolbar)
-        supportActionBar?.setDisplayShowTitleEnabled(false)
-
-        setOnClick()
-
         val bottomNavigationView = findViewById<BottomNavigationView>(R.id.bottomNavigationView)
         navController = Navigation.findNavController(this, R.id.nav_host_fragment)
 
@@ -72,14 +67,5 @@ class HomeActivity : AppCompatActivity() {
             }
         }
     }
-
-
-    private fun setOnClick() {
-        binding.btnSearch.setOnClickListener {
-            val intent = Intent(this@HomeActivity, SearchActivity::class.java)
-            startActivity(intent)
-        }
-    }
-
 
 }

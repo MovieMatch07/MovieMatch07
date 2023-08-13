@@ -15,10 +15,15 @@ import com.suraj.moviematch.data.getComedyMovieJsonData
 import com.suraj.moviematch.data.getHorrorMovieJsonData
 import com.suraj.moviematch.data.getThrillerMovieJsonData
 import com.suraj.moviematch.dataClasses.MovieReview
+import com.suraj.moviematch.dataClasses.Shorts
 import com.suraj.moviematch.db.MovieDao
 import kotlinx.coroutines.tasks.await
 
 class MoviesRepository(private val movieDao: MovieDao) {
+
+    private val db = FirebaseFirestore.getInstance()
+
+    private val shortsCollection = db.collection("shorts")
 
     fun getMoviesByFilter(filter: String): List<Movie> {
         val jsonData = when (filter) {
@@ -38,7 +43,6 @@ class MoviesRepository(private val movieDao: MovieDao) {
     }
 
 
-    private val db = FirebaseFirestore.getInstance()
 
     suspend fun addReview(movieName: String, review: MovieReview) {
         val reviewData = hashMapOf(
@@ -127,6 +131,26 @@ class MoviesRepository(private val movieDao: MovieDao) {
 
     suspend fun deleteMovie(movie: Movie) = movieDao.deleteMovie(movie)
 
+
+    fun addShort(short: Shorts) {
+        shortsCollection.add(short)
+    }
+
+
+    fun getShorts(callback: (List<Shorts>) -> Unit) {
+        shortsCollection.get()
+            .addOnSuccessListener { querySnapshot ->
+                val shortsList: MutableList<Shorts> = mutableListOf()
+                for (document in querySnapshot) {
+                    val short = document.toObject(Shorts::class.java)
+                    shortsList.add(short)
+                }
+                callback(shortsList)
+            }
+            .addOnFailureListener { exception ->
+                // Handle error
+            }
+    }
 
 
 }

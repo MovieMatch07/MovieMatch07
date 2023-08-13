@@ -100,8 +100,6 @@ class SearchActivity : AppCompatActivity() {
 
 
         binding.imgBackArrow.setOnClickListener {
-            val intent = Intent(this@SearchActivity, HomeActivity::class.java)
-            startActivity(intent)
             finish()
         }
 
