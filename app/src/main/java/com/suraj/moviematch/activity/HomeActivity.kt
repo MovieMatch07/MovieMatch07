@@ -1,5 +1,6 @@
 package com.suraj.moviematch.activity
 
+import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
@@ -23,12 +24,19 @@ import com.suraj.moviematch.databinding.ActivityHomeBinding
 import com.suraj.moviematch.repository.MoviesRepository
 import com.suraj.moviematch.viewModel.MovieViewModel
 import com.suraj.moviematch.viewModel.MovieViewModelFactory
+import io.github.inflationx.viewpump.ViewPumpContextWrapper
 import javax.inject.Inject
 
 class HomeActivity : AppCompatActivity() {
     private lateinit var binding: ActivityHomeBinding
 
     private lateinit var navController: NavController
+
+    override fun attachBaseContext(newBase: Context?) {
+        super.attachBaseContext(newBase?.let { ViewPumpContextWrapper.wrap(it) })
+    }
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityHomeBinding.inflate(layoutInflater)

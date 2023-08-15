@@ -1,5 +1,6 @@
 package com.suraj.moviematch.activity
 
+import android.content.Context
 import android.content.Intent
 import android.content.res.Configuration
 import androidx.appcompat.app.AppCompatActivity
@@ -17,6 +18,7 @@ import com.suraj.moviematch.databinding.ActivitySearchBinding
 import com.suraj.moviematch.repository.MoviesRepository
 import com.suraj.moviematch.viewModel.MovieViewModel
 import com.suraj.moviematch.viewModel.MovieViewModelFactory
+import io.github.inflationx.viewpump.ViewPumpContextWrapper
 import javax.inject.Inject
 
 class SearchActivity : AppCompatActivity() {
@@ -33,6 +35,11 @@ class SearchActivity : AppCompatActivity() {
     @Inject
     lateinit var movieViewModelFactory: MovieViewModelFactory
 
+    override fun attachBaseContext(newBase: Context?) {
+        super.attachBaseContext(newBase?.let { ViewPumpContextWrapper.wrap(it) })
+    }
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivitySearchBinding.inflate(layoutInflater)
@@ -43,8 +50,11 @@ class SearchActivity : AppCompatActivity() {
         binding.edtSearch.requestFocus()
 
         initViews()
+
         setOnClick()
+
         setUpViewModel()
+
     }
 
     private fun initViews() {

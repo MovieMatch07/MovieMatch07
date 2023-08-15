@@ -48,6 +48,10 @@ class SavedMovieAdapter2() :
              setOnClickListener?.onRemoveClick(movie)
             }
 
+            binding.btnMoviePlay.setOnClickListener {
+                setOnClickListener?.onClick(movie)
+            }
+
         }
     }
 

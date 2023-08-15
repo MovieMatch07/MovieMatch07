@@ -12,7 +12,7 @@ import com.suraj.moviematch.dataClasses.Shorts
 
 class VideoAdapter() :
     RecyclerView.Adapter<VideoAdapter.VideoViewHolder>() {
-     var videoActList = ArrayList<Shorts>()
+    var videoActList = ArrayList<Shorts>()
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): VideoViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.shorts_view, parent, false)
         return VideoViewHolder(view)

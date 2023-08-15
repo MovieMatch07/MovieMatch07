@@ -46,6 +46,9 @@ class HistoryMoviesAdapter2() :
             binding.btnMovieRemove.setOnClickListener {
                 setOnClickListener?.onRemoveClick(movie)
             }
+            binding.btnMoviePlay.setOnClickListener {
+                setOnClickListener?.onClick(movie)
+            }
         }
     }
 

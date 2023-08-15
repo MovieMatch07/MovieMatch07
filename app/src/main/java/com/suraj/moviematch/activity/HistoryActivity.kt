@@ -1,5 +1,6 @@
 package com.suraj.moviematch.activity
 
+import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -16,6 +17,7 @@ import com.suraj.moviematch.databinding.ActivityHistoryBinding
 import com.suraj.moviematch.repository.MoviesRepository
 import com.suraj.moviematch.viewModel.MovieViewModel
 import com.suraj.moviematch.viewModel.MovieViewModelFactory
+import io.github.inflationx.viewpump.ViewPumpContextWrapper
 import javax.inject.Inject
 
 class HistoryActivity : AppCompatActivity() {
@@ -29,6 +31,11 @@ class HistoryActivity : AppCompatActivity() {
 
     @Inject
     lateinit var movieViewModelFactory: MovieViewModelFactory
+
+    override fun attachBaseContext(newBase: Context?) {
+        super.attachBaseContext(newBase?.let { ViewPumpContextWrapper.wrap(it) })
+    }
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

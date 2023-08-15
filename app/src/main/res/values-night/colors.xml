@@ -15,4 +15,5 @@
     <color name="transparent1">#CB000000</color>
     <color name="transparent2">#23FFFFFF</color>
     <color name="gray2">#CACACA</color>
+    <color name="bottom_nav_icon_non_selected_dark">#3C3C3C</color>
 </resources>

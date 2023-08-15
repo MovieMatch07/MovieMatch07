@@ -1,5 +1,6 @@
 package com.suraj.moviematch.activity
 
+import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -12,12 +13,17 @@ import com.suraj.moviematch.R
 import com.suraj.moviematch.Utils.Utils
 import com.suraj.moviematch.Utils.Utils.Companion.makeToast
 import com.suraj.moviematch.databinding.ActivityCreateAccountBinding
+import io.github.inflationx.viewpump.ViewPumpContextWrapper
 
 class CreateAccountActivity : AppCompatActivity() {
 
     private lateinit var auth: FirebaseAuth
 
     lateinit var binding: ActivityCreateAccountBinding
+
+    override fun attachBaseContext(newBase: Context?) {
+        super.attachBaseContext(newBase?.let { ViewPumpContextWrapper.wrap(it) })
+    }
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
