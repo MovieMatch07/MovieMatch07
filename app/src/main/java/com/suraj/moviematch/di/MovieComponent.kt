@@ -5,6 +5,7 @@ import com.suraj.moviematch.activity.HistoryActivity
 import com.suraj.moviematch.activity.HomeActivity
 import com.suraj.moviematch.activity.MovieDetailsActivity
 import com.suraj.moviematch.activity.SavedActivity
+import com.suraj.moviematch.activity.SearchActivity
 import com.suraj.moviematch.fragments.HomeFragment
 import com.suraj.moviematch.fragments.LibraryFragment
 import com.suraj.moviematch.fragments.ReviewsFragment
@@ -26,6 +27,7 @@ interface MovieComponent {
     fun inject(libraryFragment: LibraryFragment)
     fun inject(savedActivity: SavedActivity)
     fun inject(historyActivity: HistoryActivity)
+    fun inject(searchActivity: SearchActivity)
 
 
 }
