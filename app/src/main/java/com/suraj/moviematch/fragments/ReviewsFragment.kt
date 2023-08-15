@@ -90,6 +90,7 @@ class ReviewsFragment : Fragment() {
 
             movieViewModel.movieReviewList.observe(viewLifecycleOwner) {
                 if (it != null) {
+                    movieReviewList.clear()
                     movieReviewList.addAll(it)
 
                     Log.e("movieReviewList","$it")
