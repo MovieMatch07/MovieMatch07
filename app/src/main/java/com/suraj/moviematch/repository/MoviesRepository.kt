@@ -163,7 +163,7 @@ class MoviesRepository(private val movieDao: MovieDao) {
     }
 
 
-    fun getHistory(): LiveData<List<Movie>> {
+    fun getHistory(): LiveData<List<Movie>?> {
         val historyLiveData = MutableLiveData<List<Movie>>()
 
         db.collection("history")

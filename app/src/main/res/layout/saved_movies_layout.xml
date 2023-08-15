@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="200dp"
+    android:layout_margin="@dimen/_10sdp"
+    android:background="@color/red"
+    android:elevation="@dimen/_14sdp"
+    android:padding="@dimen/_2sdp">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/white">
+
+        <ImageView
+            android:id="@+id/imgMovie"
+            android:background="@color/red"
+            android:paddingRight="@dimen/_2sdp"
+            android:layout_width="@dimen/_100sdp"
+            android:layout_height="match_parent"
+            android:scaleType="fitXY"
+            app:layout_constraintLeft_toLeftOf="parent" />
+
+
+        <TextView
+            android:id="@+id/txtMovieName"
+            android:layout_width="180sp"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/_10sdp"
+            android:gravity="center"
+            android:lines="2"
+            android:text="NetFlix"
+            android:textColor="@color/black"
+            android:textSize="@dimen/_16sdp"
+            android:textStyle="bold"
+            app:layout_constraintLeft_toRightOf="@id/imgMovie"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+
+        <TextView
+            android:id="@+id/txtMovieCategory"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/_10sdp"
+            android:gravity="center"
+            android:singleLine="true"
+            android:text="NetFlix"
+            android:textColor="@color/black"
+            android:textSize="@dimen/_12sdp"
+            android:textStyle="bold"
+            app:layout_constraintLeft_toRightOf="@id/imgMovie"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/txtMovieName" />
+
+        <Button
+            android:id="@+id/btnMoviePlay"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/_5sdp"
+            android:drawableRight="@drawable/ic_play"
+            android:gravity="center"
+            android:singleLine="true"
+            android:text="Play"
+            android:textColor="@color/white"
+            android:textSize="@dimen/_10sdp"
+            android:textStyle="bold"
+            app:layout_constraintLeft_toRightOf="@id/imgMovie"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/txtMovieCategory" />
+
+        <Button
+            android:id="@+id/btnMovieRemove"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/_5sdp"
+            android:drawableRight="@drawable/ic_cancel"
+            android:gravity="center"
+            android:singleLine="true"
+            android:text="Remove"
+            android:textColor="@color/white"
+            android:textSize="@dimen/_10sdp"
+            android:textStyle="bold"
+            app:layout_constraintLeft_toRightOf="@id/btnMoviePlay"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/txtMovieCategory" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

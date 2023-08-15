@@ -34,9 +34,11 @@ class MovieViewModel(private var movieRepository: MoviesRepository) : ViewModel(
         get() = _movieSavedList
 
 
-
     private val _shortsLiveData = MutableLiveData<List<Shorts>>()
     val shortsLiveData: LiveData<List<Shorts>> = _shortsLiveData
+
+    var historyList: LiveData<List<Movie>?> = movieRepository.getHistory()
+
 
     fun loadMoviesByFilter(filter: String) {
         val movies = movieRepository.getMoviesByFilter(filter)
@@ -90,7 +92,6 @@ class MovieViewModel(private var movieRepository: MoviesRepository) : ViewModel(
             _shortsLiveData.postValue(shortsList)
         }
     }
-    val historyList: LiveData<List<Movie>> = movieRepository.getHistory()
 
     fun addMovieHistory(movie: Movie){
         viewModelScope.launch {
@@ -105,6 +106,10 @@ class MovieViewModel(private var movieRepository: MoviesRepository) : ViewModel(
     }
 
 
+    fun refreshHistoryList() {
+        // Call the repository to get the latest history list and update the LiveData
+        historyList = movieRepository.getHistory()
+    }
 
 }
 

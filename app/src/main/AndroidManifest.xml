@@ -17,6 +17,12 @@
         android:theme="@style/Theme.MovieMatch"
         tools:targetApi="31">
         <activity
+            android:name=".activity.HistoryActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activity.SavedActivity"
+            android:exported="false" />
+        <activity
             android:name=".activity.AddShortsDataActivity"
             android:exported="false" />
         <activity

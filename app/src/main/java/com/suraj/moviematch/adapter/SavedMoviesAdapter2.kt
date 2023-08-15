@@ -6,23 +6,27 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.squareup.picasso.Picasso
 import com.suraj.moviematch.dataClasses.Movie
 import com.suraj.moviematch.dataClasses.MoviesSaved
 import com.suraj.moviematch.databinding.RvMoviesLayout2Binding
 import com.suraj.moviematch.databinding.RvMoviesLayoutBinding
+import com.suraj.moviematch.databinding.SavedMoviesLayoutBinding
 
-class SavedMovieAdapter() :
-    RecyclerView.Adapter<SavedMovieAdapter.ViewHolder>() {
+class SavedMovieAdapter2() :
+    RecyclerView.Adapter<SavedMovieAdapter2.ViewHolder>() {
 
     private val moviesList = ArrayList<Movie>()
 
     interface SetOnClickListener {
         fun onClick(movie: Movie)
+
+        fun onRemoveClick(movie: Movie)
     }
 
     var setOnClickListener: SetOnClickListener? = null
 
-    inner class ViewHolder(private val binding: RvMoviesLayout2Binding) :
+    inner class ViewHolder(private val binding: SavedMoviesLayoutBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
         init {
@@ -36,17 +40,25 @@ class SavedMovieAdapter() :
 
         fun bind(movie: Movie) {
             binding.txtMovieName.text = movie.movieName
-            Glide.with(binding.root.context).load(movie.imageUrl).into(binding.imgMovie)
+//            Glide.with(binding.root.context).load(movie.imageUrl).into(binding.imgMovie)
+            Picasso.get().load(movie.imageUrl).into(binding.imgMovie)
+            binding.txtMovieCategory.text = "${movie.categories[0]}, ${movie.categories[1]}"
+            Log.e("txtMovieNameUrl","${movie.imageUrl}")
+            binding.btnMovieRemove.setOnClickListener {
+             setOnClickListener?.onRemoveClick(movie)
+            }
+
         }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val binding = RvMoviesLayout2Binding.inflate(LayoutInflater.from(parent.context), parent, false)
+        val binding = SavedMoviesLayoutBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return ViewHolder(binding)
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val movie = moviesList[position]
+
         holder.bind(movie)
     }
 

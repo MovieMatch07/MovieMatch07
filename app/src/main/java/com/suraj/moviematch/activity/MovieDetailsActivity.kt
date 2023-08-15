@@ -121,6 +121,20 @@ class MovieDetailsActivity : AppCompatActivity() {
 
 
     private fun setUpListeners() {
+
+        binding.imgBackArrow?.setOnClickListener {
+            finish()
+            val intent = Intent(this, HomeActivity::class.java)
+            startActivity(intent)
+        }
+
+        binding.btnSearch?.setOnClickListener {
+            val intent = Intent(this, SearchActivity::class.java)
+            startActivity(intent)
+        }
+
+
+
         binding.btnPlayMovie.setOnClickListener {
             val intent = Intent(this@MovieDetailsActivity, PlayMoviesActivity::class.java)
             intent.putExtra("movieUrl", movieData.movieUrl)
@@ -197,6 +211,8 @@ class MovieDetailsActivity : AppCompatActivity() {
 
     override fun onBackPressed() {
         finish()
+        val intent = Intent(this@MovieDetailsActivity, HomeActivity::class.java)
+        startActivity(intent)
     }
 
     inner class SetOnClick : MovieAdapter.SetOnClickListener {

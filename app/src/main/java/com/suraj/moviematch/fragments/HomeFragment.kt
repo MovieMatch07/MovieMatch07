@@ -157,6 +157,7 @@ class HomeFragment : Fragment() {
             val intent = Intent(requireContext(), MovieDetailsActivity::class.java)
             intent.putExtra("movie", movie)
             startActivity(intent)
+            requireActivity().finish()
         }
     }
 

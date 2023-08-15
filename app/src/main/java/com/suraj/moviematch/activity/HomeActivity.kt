@@ -1,10 +1,12 @@
 package com.suraj.moviematch.activity
 
+import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.TextView
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -66,6 +68,20 @@ class HomeActivity : AppCompatActivity() {
                 else -> false
             }
         }
+    }
+    private fun showQuitConfirmationDialog() {
+        val builder = AlertDialog.Builder(this@HomeActivity)
+        builder.setTitle("Quit")
+        builder.setMessage("Are you sure you want to quit the app?")
+        builder.setPositiveButton("Quit") { dialogInterface: DialogInterface, i: Int ->
+           finish()
+        }
+        builder.setNegativeButton("Cancel", null)
+        builder.show()
+    }
+
+    override fun onBackPressed() {
+        showQuitConfirmationDialog()
     }
 
 }

@@ -4,6 +4,7 @@ import android.content.DialogInterface
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -15,8 +16,11 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.google.firebase.auth.FirebaseAuth
 import com.suraj.moviematch.R
+import com.suraj.moviematch.activity.HistoryActivity
 import com.suraj.moviematch.activity.MovieDetailsActivity
+import com.suraj.moviematch.activity.SavedActivity
 import com.suraj.moviematch.activity.SearchActivity
+import com.suraj.moviematch.activity.loginActivity
 import com.suraj.moviematch.adapter.HistoryMoviesAdapter
 import com.suraj.moviematch.adapter.MovieAdapter
 import com.suraj.moviematch.adapter.SavedMovieAdapter
@@ -41,7 +45,7 @@ class LibraryFragment : Fragment() {
     @Inject
     lateinit var movieViewModelFactory: MovieViewModelFactory
 
-    @RequiresApi(Build.VERSION_CODES.S)
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -60,7 +64,7 @@ class LibraryFragment : Fragment() {
     }
 
 
-    @RequiresApi(Build.VERSION_CODES.S)
+
     private fun initViews() {
 
         movieViewModel =
@@ -83,6 +87,16 @@ class LibraryFragment : Fragment() {
 
         binding.btnSearch.setOnClickListener {
             val intent = Intent(requireContext(), SearchActivity::class.java)
+            startActivity(intent)
+        }
+
+        binding.txtSavedViewAll.setOnClickListener {
+            val intent = Intent(requireContext(), SavedActivity::class.java)
+            startActivity(intent)
+        }
+
+        binding.txtHistoryViewAll.setOnClickListener {
+            val intent = Intent(requireContext(), HistoryActivity::class.java)
             startActivity(intent)
         }
 
@@ -109,13 +123,14 @@ class LibraryFragment : Fragment() {
     }
 
 
-    @RequiresApi(Build.VERSION_CODES.S)
+
     private fun showLogoutConfirmationDialog() {
         val builder = AlertDialog.Builder(requireContext())
         builder.setTitle("Logout")
         builder.setMessage("Are you sure you want to log out?")
         builder.setPositiveButton("Log Out") { dialogInterface: DialogInterface, i: Int ->
-            val intent = Intent(requireContext(), SplashScreen::class.java)
+            FirebaseAuth.getInstance().signOut()
+            val intent = Intent(requireContext(), loginActivity::class.java)
             startActivity(intent)
             requireActivity().finish()
         }
@@ -140,5 +155,9 @@ class LibraryFragment : Fragment() {
         }
     }
 
+    override fun onResume() {
+        super.onResume()
+        movieViewModel.refreshHistoryList()
+    }
 
 }
