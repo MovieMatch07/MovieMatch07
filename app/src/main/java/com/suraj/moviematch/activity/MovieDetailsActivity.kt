@@ -47,11 +47,16 @@ class MovieDetailsActivity : AppCompatActivity() {
 
         initData()
         getSavedMovies()
+        adddataToHistory()
         loadDataInRecyclerView()
         setUpViewModel()
         setUpListeners()
         updateUI()
 
+    }
+
+    private fun adddataToHistory(){
+       movieViewModel.addMovieHistory(movieData)
     }
 
     private fun updateUI() {
@@ -196,6 +201,9 @@ class MovieDetailsActivity : AppCompatActivity() {
 
     inner class SetOnClick : MovieAdapter.SetOnClickListener {
         override fun onClick(movie: Movie) {
+
+
+
             val intent = Intent(this@MovieDetailsActivity, MovieDetailsActivity::class.java)
             intent.putExtra("movie", movie)
             startActivity(intent)

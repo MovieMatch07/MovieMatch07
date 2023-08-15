@@ -1,6 +1,8 @@
 package com.suraj.moviematch.repository
 
 import android.util.Log
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import com.google.android.gms.tasks.Task
 import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.FirebaseFirestore
@@ -41,7 +43,6 @@ class MoviesRepository(private val movieDao: MovieDao) {
         val moviesData = gson.fromJson(jsonData, Movies::class.java)
         return moviesData.movies
     }
-
 
 
     suspend fun addReview(movieName: String, review: MovieReview) {
@@ -93,7 +94,6 @@ class MoviesRepository(private val movieDao: MovieDao) {
     }
 
 
-
     suspend fun getSavedMovies(userUid: String): List<Movie> {
         val savedMoviesCollection = db.collection("UserSavedData")
             .document(userUid)
@@ -111,7 +111,6 @@ class MoviesRepository(private val movieDao: MovieDao) {
     }
 
 
-
     suspend fun deleteSavedMovieByName(userUid: String, movieName: String) {
         val savedMoviesCollection = db.collection("UserSavedData")
             .document(userUid)
@@ -122,7 +121,6 @@ class MoviesRepository(private val movieDao: MovieDao) {
             document.reference.delete().await()
         }
     }
-
 
 
     suspend fun getAllMovies(): List<Movie> = movieDao.getAllMovies()
@@ -146,6 +144,53 @@ class MoviesRepository(private val movieDao: MovieDao) {
                     shortsList.add(short)
                 }
                 callback(shortsList)
+            }
+            .addOnFailureListener { exception ->
+                // Handle error
+            }
+    }
+
+
+   suspend fun addMovieToHistory(movie: Movie) {
+        db.collection("history")
+            .add(movie)
+            .addOnSuccessListener { documentReference ->
+                Log.e("addMovieToHistory","$documentReference")
+            }
+            .addOnFailureListener { exception ->
+                Log.e("addMovieToHistory","$exception")
+            }
+    }
+
+
+    fun getHistory(): LiveData<List<Movie>> {
+        val historyLiveData = MutableLiveData<List<Movie>>()
+
+        db.collection("history")
+            .get()
+            .addOnSuccessListener { querySnapshot ->
+                val movies = mutableListOf<Movie>()
+                for (document in querySnapshot) {
+                    val movie = document.toObject(Movie::class.java)
+                    movies.add(movie)
+                }
+                historyLiveData.value = movies
+            }
+            .addOnFailureListener { exception ->
+                // Handle error
+            }
+
+        return historyLiveData
+    }
+
+  suspend  fun deleteMovieFromHistory(movie: Movie) {
+        db.collection("history")
+            .whereEqualTo("movieName", movie.movieName)
+            .get()
+            .addOnSuccessListener { querySnapshot ->
+                for (document in querySnapshot) {
+                    document.reference.delete()
+                }
             }
             .addOnFailureListener { exception ->
                 // Handle error

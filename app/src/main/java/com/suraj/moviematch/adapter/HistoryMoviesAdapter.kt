@@ -10,8 +10,8 @@ import com.suraj.moviematch.dataClasses.MoviesSaved
 import com.suraj.moviematch.databinding.RvMoviesLayout2Binding
 import com.suraj.moviematch.databinding.RvMoviesLayoutBinding
 
-class SavedMovieAdapter() :
-    RecyclerView.Adapter<SavedMovieAdapter.ViewHolder>() {
+class HistoryMoviesAdapter() :
+    RecyclerView.Adapter<HistoryMoviesAdapter.ViewHolder>() {
 
     private val moviesList = ArrayList<Movie>()
 
@@ -40,7 +40,8 @@ class SavedMovieAdapter() :
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val binding = RvMoviesLayout2Binding.inflate(LayoutInflater.from(parent.context), parent, false)
+        val binding =
+            RvMoviesLayout2Binding.inflate(LayoutInflater.from(parent.context), parent, false)
         return ViewHolder(binding)
     }
 
@@ -50,7 +51,7 @@ class SavedMovieAdapter() :
     }
 
     override fun getItemCount(): Int {
-        return  moviesList.size
+        return moviesList.size
     }
 
     fun addAll(moviesList2: List<Movie>) {
@@ -58,6 +59,5 @@ class SavedMovieAdapter() :
         moviesList.addAll(moviesList2)
         notifyDataSetChanged()
     }
-
 
 }

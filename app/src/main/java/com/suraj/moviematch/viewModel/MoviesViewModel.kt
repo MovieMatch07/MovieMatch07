@@ -90,6 +90,21 @@ class MovieViewModel(private var movieRepository: MoviesRepository) : ViewModel(
             _shortsLiveData.postValue(shortsList)
         }
     }
+    val historyList: LiveData<List<Movie>> = movieRepository.getHistory()
+
+    fun addMovieHistory(movie: Movie){
+        viewModelScope.launch {
+            movieRepository.addMovieToHistory(movie)
+        }
+    }
+
+    fun deleteMovieFromHistory(movie: Movie) {
+       viewModelScope.launch {
+           movieRepository.deleteMovieFromHistory(movie)
+       }
+    }
+
+
 
 }
 
