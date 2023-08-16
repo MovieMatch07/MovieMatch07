@@ -110,7 +110,4 @@ class ReviewsFragment : Fragment() {
             movieViewModel.getReviews(movieName)
         }
     }
-
-
-
 }
