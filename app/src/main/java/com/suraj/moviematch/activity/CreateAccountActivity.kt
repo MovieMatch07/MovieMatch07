@@ -9,7 +9,6 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
-import com.suraj.moviematch.R
 import com.suraj.moviematch.Utils.Utils
 import com.suraj.moviematch.Utils.Utils.Companion.makeToast
 import com.suraj.moviematch.databinding.ActivityCreateAccountBinding
@@ -73,7 +72,7 @@ class CreateAccountActivity : AppCompatActivity() {
         }
 
         binding.txtHaveAccount.setOnClickListener {
-            var intent = Intent(this@CreateAccountActivity, loginActivity::class.java)
+            var intent = Intent(this@CreateAccountActivity, LoginActivity::class.java)
             startActivity(intent)
             finish()
         }

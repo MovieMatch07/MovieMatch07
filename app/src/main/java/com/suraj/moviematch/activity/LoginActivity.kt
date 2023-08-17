@@ -4,22 +4,16 @@ import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.View
-import android.widget.Button
-import android.widget.EditText
-import android.widget.TextView
-import android.widget.Toast
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
-import com.suraj.moviematch.R
 import com.suraj.moviematch.Utils.Utils
 import com.suraj.moviematch.Utils.Utils.Companion.makeToast
 import com.suraj.moviematch.databinding.ActivityLoginBinding
 import io.github.inflationx.viewpump.ViewPumpContextWrapper
 
-class loginActivity : AppCompatActivity() {
+class LoginActivity : AppCompatActivity() {
 
     private lateinit var auth: FirebaseAuth
 
@@ -73,7 +67,7 @@ class loginActivity : AppCompatActivity() {
         }
 
         binding.txtCreateAccount.setOnClickListener {
-            var intent = Intent(this@loginActivity, CreateAccountActivity::class.java)
+            var intent = Intent(this@LoginActivity, CreateAccountActivity::class.java)
             startActivity(intent)
             finish()
         }
@@ -98,7 +92,7 @@ class loginActivity : AppCompatActivity() {
 
     private fun updateUI(user: FirebaseUser?) {
         if (user != null) {
-            val intent = Intent(this@loginActivity, HomeActivity::class.java)
+            val intent = Intent(this@LoginActivity, HomeActivity::class.java)
             startActivity(intent)
             finish()
         }

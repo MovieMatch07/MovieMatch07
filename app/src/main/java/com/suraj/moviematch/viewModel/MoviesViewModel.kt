@@ -10,8 +10,6 @@ import com.google.firebase.auth.FirebaseAuth
 import com.suraj.moviematch.dataClasses.Movie
 import com.suraj.moviematch.dataClasses.MovieReview
 import com.suraj.moviematch.dataClasses.Shorts
-import com.suraj.moviematch.db.DatabaseProvider
-import com.suraj.moviematch.db.MovieDao
 import com.suraj.moviematch.repository.MoviesRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch

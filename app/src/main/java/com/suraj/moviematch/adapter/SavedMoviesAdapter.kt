@@ -1,15 +1,11 @@
 package com.suraj.moviematch.adapter
 
-import android.util.Log
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.suraj.moviematch.dataClasses.Movie
-import com.suraj.moviematch.dataClasses.MoviesSaved
 import com.suraj.moviematch.databinding.RvMoviesLayout2Binding
-import com.suraj.moviematch.databinding.RvMoviesLayoutBinding
 
 class SavedMovieAdapter() :
     RecyclerView.Adapter<SavedMovieAdapter.ViewHolder>() {

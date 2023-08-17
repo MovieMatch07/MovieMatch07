@@ -2,15 +2,10 @@ package com.suraj.moviematch.adapter
 
 import android.util.Log
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
 import com.squareup.picasso.Picasso
 import com.suraj.moviematch.dataClasses.Movie
-import com.suraj.moviematch.dataClasses.MoviesSaved
-import com.suraj.moviematch.databinding.RvMoviesLayout2Binding
-import com.suraj.moviematch.databinding.RvMoviesLayoutBinding
 import com.suraj.moviematch.databinding.SavedMoviesLayoutBinding
 
 class SavedMovieAdapter2() :

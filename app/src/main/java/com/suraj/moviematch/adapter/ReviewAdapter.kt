@@ -15,17 +15,9 @@ class ReviewAdapter(val movieReviewList: ArrayList<MovieReview>) :
 
     inner class ReviewHolder(val view: View) : RecyclerView.ViewHolder(view) {
 
-        lateinit var ratingBar: RatingBar
-        lateinit var txtReview: TextView
-        lateinit var txtUser: TextView
-
-        init {
-
-            ratingBar = view.findViewById(R.id.ratingBar)
-            txtReview = view.findViewById(R.id.txtMovieReview)
-            txtUser = view.findViewById(R.id.txtMovieReviewUser)
-
-        }
+        var ratingBar: RatingBar = view.findViewById(R.id.ratingBar)
+        var txtReview: TextView = view.findViewById(R.id.txtMovieReview)
+        var txtUser: TextView = view.findViewById(R.id.txtMovieReviewUser)
 
 
     }

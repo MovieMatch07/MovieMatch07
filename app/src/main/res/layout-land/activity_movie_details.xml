@@ -130,7 +130,7 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
                                 android:layout_weight="1"
-                                android:src="@drawable/baseline_add_24" />
+                                android:src="@drawable/ic_unsave" />
 
                             <TextView
                                 android:id="@+id/txtSaveMovie"
