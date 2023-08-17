@@ -136,6 +136,7 @@ class MovieDetailsActivity : AppCompatActivity() {
         binding.btnSearch?.setOnClickListener {
             val intent = Intent(this, SearchActivity::class.java)
             startActivity(intent)
+            finish()
         }
 
 

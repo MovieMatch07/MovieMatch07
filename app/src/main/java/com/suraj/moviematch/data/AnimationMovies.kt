@@ -57,7 +57,7 @@ val jsonAnimatinMovies = """
      {
       "movieUrl": "https://firebasestorage.googleapis.com/v0/b/moviematch-39d8e.appspot.com/o/Movies%2FAnimation%2FMovies%2FTheCroods.mkv?alt=media&token=dc4f78d6-e4d1-4fa9-9975-5c1554a24aed",
       "imageUrl": "https://firebasestorage.googleapis.com/v0/b/moviematch-39d8e.appspot.com/o/Movies%2FAnimation%2Fimages%2Fcroods.jpg?alt=media&token=54703574-71fa-4476-aee7-7361fc7aa456",
-      "movieName": "The Croods  ",
+      "movieName": "The Croods",
       "categories": ["Animation", "Comedy"],
       "length": "1h 38m"
     },

@@ -57,10 +57,21 @@ class HomeFragment : Fragment() {
         selectedFilterTextView = binding.txtFilterAll
         selectFilterTextView(selectedFilterTextView)
 
+
+      binding.swipeRefreshLayout.setOnRefreshListener {
+            refreshData()
+        }
+
         return binding.root
     }
 
+    private fun refreshData() {
+        movieViewModel.loadMoviesByFilter("All")
+        selectedFilterTextView = binding.txtFilterAll
+        selectFilterTextView(selectedFilterTextView)
+       binding. swipeRefreshLayout.isRefreshing = false
 
+    }
 
     private fun initViews() {
 
@@ -87,6 +98,7 @@ class HomeFragment : Fragment() {
         binding.btnSearch.setOnClickListener {
             val intent = Intent(requireContext(), SearchActivity::class.java)
             startActivity(intent)
+            requireActivity().finish()
         }
 
     }

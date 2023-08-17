@@ -2,15 +2,13 @@ package com.suraj.moviematch.activity
 
 import android.content.Context
 import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
 import android.os.PowerManager
 import android.view.View
 import android.view.WindowManager
-import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.exoplayer2.*
-import com.google.android.exoplayer2.ui.PlayerView
 import com.google.android.exoplayer2.ui.StyledPlayerView
 import com.suraj.moviematch.R
 import com.suraj.moviematch.databinding.ActivityPlayMoviesBinding
@@ -75,9 +73,25 @@ class PlayMoviesActivity : AppCompatActivity() {
     }
 
     override fun onBackPressed() {
-        player.release()
-        val intent = Intent(this@PlayMoviesActivity, HomeActivity::class.java)
-        startActivity(intent)
-        finish()
+      showExitConfirmationDialog()
     }
+
+    private fun showExitConfirmationDialog() {
+        val alertDialog = AlertDialog.Builder(this)
+            .setTitle("Confirmation")
+            .setMessage("Are you sure you want to stop watching the movie?")
+            .setPositiveButton("Yes") { dialog, _ ->
+                player.release()
+                val intent = Intent(this@PlayMoviesActivity, HomeActivity::class.java)
+                startActivity(intent)
+                finish()
+            }
+            .setNegativeButton("No") { dialog, _ ->
+                dialog.dismiss() // Dismiss the dialog
+            }
+            .create()
+
+        alertDialog.show()
+    }
+
 }

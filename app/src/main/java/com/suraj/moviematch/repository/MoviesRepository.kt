@@ -143,6 +143,10 @@ class MoviesRepository(private val movieDao: MovieDao) {
                     val short = document.toObject(Shorts::class.java)
                     shortsList.add(short)
                 }
+
+                // Reset random positions of list items
+                shortsList.shuffle()
+
                 callback(shortsList)
             }
             .addOnFailureListener { exception ->
@@ -151,7 +155,7 @@ class MoviesRepository(private val movieDao: MovieDao) {
     }
 
 
-   suspend fun addMovieToHistory(movie: Movie) {
+    suspend fun addMovieToHistory(movie: Movie) {
         db.collection("history")
             .add(movie)
             .addOnSuccessListener { documentReference ->

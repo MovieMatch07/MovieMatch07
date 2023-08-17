@@ -17,6 +17,15 @@
         android:theme="@style/Theme.MovieMatch"
         tools:targetApi="31">
         <activity
+            android:name=".activity.SplashActivity"
+            android:exported="true" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
             android:name=".activity.HistoryActivity"
             android:exported="false" />
         <activity
@@ -24,7 +33,7 @@
             android:exported="false" />
         <activity
             android:name=".activity.AddShortsDataActivity"
-            android:exported="false" />
+            android:exported="true"></activity>
         <activity
             android:name=".activity.SearchActivity"
             android:exported="false" />
@@ -38,11 +47,7 @@
         <activity
             android:name=".activity.loginActivity"
             android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
         <activity
             android:name=".activity.CreateAccountActivity"

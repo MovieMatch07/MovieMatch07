@@ -42,7 +42,7 @@
         android:layout_marginTop="280dp"
         android:layout_marginEnd="32dp"
         android:textColorHint="@color/black"
-        android:hint="Enter Email">
+        android:hint="Email">
         <!--this is the actual edit text which takes the input-->
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/edit_email"
@@ -70,7 +70,7 @@
         app:passwordToggleEnabled="true"
         app:passwordToggleTint="@color/black"
         android:textColorHint="@color/black"
-        android:hint="Enter Password">
+        android:hint="Password">
 
         <!--this is the actual edit text which takes the input-->
         <com.google.android.material.textfield.TextInputEditText

@@ -7,7 +7,7 @@
     <item
         android:id="@+id/navigation_Trending"
         android:icon="@drawable/ic_new"
-        android:title="Trending" />
+        android:title="Shorts" />
     <item
         android:id="@+id/navigation_Library"
         android:icon="@drawable/ic_library"
